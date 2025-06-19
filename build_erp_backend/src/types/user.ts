@@ -6,5 +6,16 @@ export interface signupUser{
 }
 
 export interface OTP{
-   otp:string
+   otp:string,
+   email:string
+}
+
+export interface Email{
+   otpEmail:string
+}
+
+//login
+export interface LoginData{
+   email:string,
+   password:string
 }

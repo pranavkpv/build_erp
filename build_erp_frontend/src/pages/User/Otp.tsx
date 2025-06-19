@@ -18,6 +18,7 @@ function Otp() {
          setTimer(prev => {
             if (prev >= 30) {
                clearInterval(interval)
+               setTimer(0)
                return prev
             }
             return prev + 1
@@ -63,6 +64,25 @@ function Otp() {
       }
    }
 
+   const resendOTP = async()=>{
+      setTimer(0)
+      const response = await axios.post(`${ import.meta.env.VITE_BASE_URL }/resendOtp`,{otpEmail})
+      const interval = setInterval(() => {
+         setTimer(prev => {
+            if (prev > 30) {
+               clearInterval(interval)
+               return prev
+            }
+            return prev + 1
+         })
+      }, 1000)
+      if(response.data.success){
+         toast.success(response.data.message)
+      }else{
+         toast.error(response.data.message)
+      }
+   }
+
   
 
    return (
@@ -75,7 +95,7 @@ function Otp() {
 
          <p ref={validRef}></p>
 
-         <button type="button"  disabled={!resend}>
+         <button type="button"  disabled={!resend} onClick={resendOTP}>
             Resend OTP
          </button>
          <button type="submit">Verify OTP</button>

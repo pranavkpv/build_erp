@@ -1,11 +1,12 @@
 import Usermodel from "../models/Usermodel";
-import { signupUser, OTP } from "../types/user"
-import { hashedPassword } from "../utils/hash";
+import { signupUser, OTP, Email,LoginData } from "../types/user"
+import { hashedPassword,comparedPassword } from "../utils/hash";
 import TempUsermodel from "../models/TempUsermodel";
 import { sendEmail } from "../utils/sendEmail";
 
 
 
+//signup
 export const signUp = async (data: signupUser) => {
    const { username, email, phone, password } = data
 
@@ -44,8 +45,8 @@ export const signUp = async (data: signupUser) => {
    }
 }
 
-
-export const OTPVerify = async (data: { otp: string, email: string }) => {
+//verify otp
+export const OTPVerify = async (data: OTP) => {
    const { otp, email } = data
 
    const ExistUser = await TempUsermodel.findOne({ email, otp })
@@ -79,6 +80,59 @@ export const OTPVerify = async (data: { otp: string, email: string }) => {
    return {
       success: true,
       message: "OTP confirmed. User registration was successful."
+   }
+}
+
+
+// resend otp
+export const resend = async (data: Email) => {
+
+   const existEmail = await TempUsermodel.findOne({ email: data.otpEmail })
+   if (existEmail) {
+      const otp = Math.floor(100000 + Math.random() * 900000)
+      const text = `Dear ${ existEmail.username }, your One-Time Password (OTP) for signing up with BuildERP is ${ otp }. Do not share this code with anyone.`
+      const emailSend = await sendEmail(existEmail.email, "OTP verification", text)
+
+      if (emailSend) {
+  
+         await TempUsermodel.findOneAndUpdate({email:data.otpEmail},{$set:{otp:otp,otpCreatedAt:Date.now()}})
+         return {
+            success: true,
+            message: "An OTP has been sent to your email. Please check your inbox and enter the OTP for verification."
+         }
+      } else {
+         return {
+            success: false,
+            message: "Failed to send OTP email. Please try again later.",
+         }
+      }
+   }
+}
+
+//login user
+
+export const ValidLogin = async(data:LoginData)=>{
+   const {email,password} = data
+   
+   const existUser = await Usermodel.findOne({email});
+   if(!existUser){
+      return{
+         success:false,
+         message:"Invalid email address. Please try again."
+      }
+   }
+   const passwordCheck = await comparedPassword(password,existUser.password)
+   if(!passwordCheck){
+      return{
+         success:false,
+         message:"Invalid password. Please try again."
+      }
+   }
+   else{
+      return{
+         success:true,
+         message:"Login successfully"
+      }
    }
 }
 
