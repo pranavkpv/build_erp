@@ -2,58 +2,52 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-type CategoryType = {
-  _id: string;
-  category_name: string;
-  description: string;
-};
 
-type CategoryProps = {
+
+type Unitprops = {
   editId: string;
   enable: boolean;
-  editCategory: string;
-  editDescription: string;
+  editUnit: string;
+  editShortname: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: CategoryType) => void; 
 };
 
-function EditCategory({
+function EditUnit({
   enable,
   setEnable,
   editId,
-  editCategory,
-  editDescription,
-  onUpdate,
-}: CategoryProps) {
-  const [category, setCategory] = useState(editCategory);
-  const [description, setDescription] = useState(editDescription);
-  const catRef = useRef<HTMLParagraphElement>(null);
+  editUnit,
+  editShortname,
+}: Unitprops) {
+  const [unit, setUnit] = useState(editUnit);
+  const [short_name, setShortname] = useState(editShortname);
+  const unitRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    setCategory(editCategory);
-    setDescription(editDescription);
-  }, [editCategory, editDescription]);
+    setUnit(editUnit);
+    setShortname(editShortname);
+  }, [editUnit, editShortname]);
 
   const editSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (category.trim() === "") {
-      catRef.current!.innerText = "Category is required. Please enter your Category.";
+    if (unit.trim() === "") {
+      unitRef.current!.innerText = "Category is required. Please enter your unit.";
       return;
     } else {
-      catRef.current!.innerText = "";
+      unitRef.current!.innerText = "";
     }
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
         editId,
-        category,
-        description,
+        unit,
+        short_name,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onUpdate(response.data.data); 
+  
         setEnable(false); 
       } else {
         toast.error(response.data.message);
@@ -71,27 +65,27 @@ function EditCategory({
         className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md space-y-4"
         onSubmit={editSubmit}
       >
-        <h2 className="text-xl font-bold text-gray-700 text-center">Edit Category</h2>
+        <h2 className="text-xl font-bold text-gray-700 text-center">Edit Unit</h2>
 
         <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Category Name</label>
+          <label className="block text-gray-600 font-medium">Unit Name</label>
           <input
             type="text"
-            value={category}
-            placeholder="Enter category name"
-            onChange={(e) => setCategory(e.target.value)}
+            value={unit}
+            placeholder="Enter unit name"
+            onChange={(e) => setUnit(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <p ref={catRef} className="text-red-500 text-sm" />
+          <p ref={unitRef} className="text-red-500 text-sm" />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Description</label>
+          <label className="block text-gray-600 font-medium">Shortname</label>
           <input
             type="text"
-            value={description}
-            placeholder="Enter description"
-            onChange={(e) => setDescription(e.target.value)}
+            value={short_name}
+            placeholder="Enter short name"
+            onChange={(e) => setShortname(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
@@ -116,4 +110,4 @@ function EditCategory({
   );
 }
 
-export default EditCategory;
+export default EditUnit;

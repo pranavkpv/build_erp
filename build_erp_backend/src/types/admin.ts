@@ -17,3 +17,18 @@ export interface updateCategoryData{
 export interface deleteCategoryData{
    id:string
 }
+
+export interface addUnitData{
+    unit:string,
+    shortname:string
+}
+
+export interface editUnitData{
+   editId:string,
+   unit:string,
+   short_name:string
+}
+
+export interface deletUnitData{
+   id:string
+}

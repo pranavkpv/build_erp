@@ -8,6 +8,7 @@ import Adminlogin from './pages/Admin/Adminlogin'
 import Adminlayout from "./pages/Admin/Adminlayout"
 import Category from "./components/Category/Category"
 import Dashboard from "./components/Dashboard"
+import Unit from "./components/Unit/Unit"
 
 
 
@@ -26,6 +27,7 @@ function App() {
           <Route path="/admin" element={<Adminlayout />} >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="category" element={<Category />} />
+            <Route path="unit" element={<Unit />} />
           </Route>
         </Routes>
       </BrowserRouter>
