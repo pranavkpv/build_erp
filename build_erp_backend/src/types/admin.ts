@@ -32,3 +32,16 @@ export interface editUnitData{
 export interface deletUnitData{
    id:string
 }
+
+export interface addBrandData{
+   brand_name:string
+}
+
+export interface editBrandData{
+   editId :string,
+   brand_name:string
+}
+
+export interface deleteBrandData{
+   id:string
+}

@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 type CategoryProps = {
   enable: boolean;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
+  onAdd :(category:{_id:string,category_name:string,description:string})=>void
 };
 
-function AddCategory({ enable, setEnable }: CategoryProps) {
+function AddCategory({ enable, setEnable,onAdd }: CategoryProps) {
   const [category, setCategory] = useState("");
   const [description, setDescription] = useState("");
   const categoryRef = useRef<HTMLParagraphElement>(null);
@@ -32,6 +33,7 @@ function AddCategory({ enable, setEnable }: CategoryProps) {
 
       if (response.data.success) {
         toast.success(response.data.message);
+         onAdd(response.data.data); 
         setEnable(false);
       } else {
         toast.error(response.data.message);

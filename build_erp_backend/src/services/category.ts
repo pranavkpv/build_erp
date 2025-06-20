@@ -20,7 +20,8 @@ export const saveCategory = async (data: categoryData) => {
          description
       })
       await newCategory.save()
-      return { success: true, message: "category saved successfully" }
+      const addedCategory = await CategoryModel.findOne({category_name:category})
+      return { success: true, message: "category saved successfully",data:addedCategory }
    }
 }
 

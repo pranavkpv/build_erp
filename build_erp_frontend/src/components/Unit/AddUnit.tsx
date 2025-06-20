@@ -5,9 +5,10 @@ import { toast } from "react-toastify";
 type Unitprops = {
   enable: boolean;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
+  onAdd: (unit: { _id: string; unit_name: string,short_name:string }) => void;
 };
 
-function AddUnit({ enable, setEnable }: Unitprops) {
+function AddUnit({ enable, setEnable,onAdd }: Unitprops) {
   const [unit, setUnit] = useState("");
   const [shortname, setShortname] = useState("");
   const unitRef = useRef<HTMLParagraphElement>(null);
@@ -17,7 +18,7 @@ function AddUnit({ enable, setEnable }: Unitprops) {
 
     if (unit.trim() === "") {
       if (unitRef.current) {
-        unitRef.current.innerText = "Unit is required. Please enter your Category.";
+        unitRef.current.innerText = "Unit is required. Please enter your Unit.";
       }
       return;
     } else {
@@ -32,6 +33,7 @@ function AddUnit({ enable, setEnable }: Unitprops) {
 
       if (response.data.success) {
         toast.success(response.data.message);
+        onAdd(response.data.data); 
         setEnable(false);
       } else {
         toast.error(response.data.message);

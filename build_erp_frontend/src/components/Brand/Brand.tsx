@@ -1,31 +1,30 @@
 import { useEffect, useState } from "react";
-import AddUnit from "./AddUnit";
-import EditUnit from "./EditUnit";
-import DeleteUnit from "./DeleteUnit";
+import AddBrand from "./AddBrand";
+import EditBrand from "./EditBrand";
+import DeletBrand from "./DeleteBrand";
 import axios from "axios";
 import { toast } from "react-toastify";
 
-type UnitType = {
+type BrandType = {
   _id: string;
-  unit_name: string;
-  short_name: string;
+  brand_name: string;
+
 };
 
-function Unit() {
+function Brand() {
   const [enableAdd, setEnableAdd] = useState(false);
-  const [unitList, setUnitList] = useState<UnitType[]>([]);
-  const [searchUnit, setSearchUnit] = useState<string>("");
+  const [brandList, setBrandlist] = useState<BrandType[]>([]);
+  const [searchBrand, setSearchBrand] = useState<string>("");
   const [enableEdit, setEnableEdit] = useState(false);
   const [editId, setEditId] = useState("");
-  const [editUnit, setEditUnit] = useState("");
-  const [editShortUnit, setEditShortUnit] = useState("");
+  const [editBrand, setEditbrand] = useState("");
   const [deleteId, setDeleteId] = useState("");
   const [enableDelete, setEnableDelete] = useState(false);
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/unit`);
-      setUnitList(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/brand`);
+      setBrandlist(response.data);
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while fetching units.");
@@ -46,7 +45,7 @@ function Unit() {
             type="text"
             placeholder="Search unit..."
             className="w-1/2 p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-            onChange={(e) => setSearchUnit(e.target.value)}
+            onChange={(e) => setSearchBrand(e.target.value)}
           />
           <button
             className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow"
@@ -56,35 +55,32 @@ function Unit() {
           </button>
         </div>
 
-        <AddUnit enable={enableAdd} setEnable={setEnableAdd} onAdd={(newUnit) => setUnitList((prev) => [...prev, newUnit])} />
+        <AddBrand enable={enableAdd} setEnable={setEnableAdd}  onAdd={(newBrand) => setBrandlist((prev) => [...prev, newBrand])} />
 
         <div className="overflow-auto rounded-lg shadow-md">
           <table className="min-w-full bg-white text-sm text-left">
             <thead className="bg-blue-100 text-gray-700 text-sm uppercase">
               <tr>
                 <th className="px-6 py-3">SL No</th>
-                <th className="px-6 py-3">Unit</th>
-                <th className="px-6 py-3">Short Unit</th>
+                <th className="px-6 py-3">Brand Name</th>
                 <th className="px-6 py-3 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {unitList
+              {brandList
                 .filter((item) =>
-                  item.unit_name.toLowerCase().includes(searchUnit.toLowerCase())
+                  item.brand_name.toLowerCase().includes(searchBrand.toLowerCase())
                 )
-                .map((unit, index) => (
-                  <tr key={unit._id} className="hover:bg-gray-50">
+                .map((brand, index) => (
+                  <tr key={brand._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 font-medium">{index + 1}</td>
-                    <td className="px-6 py-4">{unit.unit_name}</td>
-                    <td className="px-6 py-4">{unit.short_name}</td>
+                    <td className="px-6 py-4">{brand.brand_name}</td>
                     <td className="px-6 py-4 text-center">
                       <button
                         onClick={() => {
                           setEnableEdit(true);
-                          setEditId(unit._id);
-                          setEditUnit(unit.unit_name);
-                          setEditShortUnit(unit.short_name);
+                          setEditId(brand._id);
+                          setEditbrand(brand.brand_name);
                         }}
                         className="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-1 px-3 rounded mr-2"
                       >
@@ -93,7 +89,7 @@ function Unit() {
                       <button
                         className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded"
                         onClick={() => {
-                          setDeleteId(unit._id);
+                          setDeleteId(brand._id);
                           setEnableDelete(true);
                         }}
                       >
@@ -106,22 +102,21 @@ function Unit() {
           </table>
         </div>
 
-        <EditUnit
+        <EditBrand
           enable={enableEdit}
           setEnable={setEnableEdit}
           editId={editId}
-          editUnit={editUnit}
-          editShortname={editShortUnit}
-          onUpdate={(updatedUnit) => {
-            setUnitList((prev) =>
+          editBrandname={editBrand}
+          onUpdate={(updateBrand) => {
+            setBrandlist((prev) =>
               prev.map((u) =>
-                u._id === updatedUnit._id ? updatedUnit : u
+                u._id === updateBrand._id ? updateBrand : u
               )
             );
           }}
         />
 
-        <DeleteUnit
+        <DeletBrand
           enable={enableDelete}
           deleteId={deleteId}
           setEnable={setEnableDelete}
@@ -132,4 +127,4 @@ function Unit() {
   );
 }
 
-export default Unit;
+export default Brand;

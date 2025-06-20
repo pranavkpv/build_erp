@@ -60,7 +60,7 @@ function Category() {
           </button>
         </div>
 
-        <AddCategory enable={enableAdd} setEnable={setEnableAdd} />
+        <AddCategory enable={enableAdd} setEnable={setEnableAdd} onAdd={(newCat) => setCategories((prev) => [...prev, newCat])}/>
 
         <div className="overflow-auto rounded-lg shadow-md">
           <table className="min-w-full bg-white text-sm text-left">

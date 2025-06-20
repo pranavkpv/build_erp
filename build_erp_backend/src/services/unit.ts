@@ -21,9 +21,11 @@ export const saveUnit = async(data:addUnitData)=>{
          short_name:shortname
       })
       await newUnit.save()
+      const addedUnit = await UnitModel.findOne({unit_name:unit})
        return {
          success:true,
-         message:"Unit registerd successfully"
+         message:"Unit registerd successfully",
+         addedUnit
       }
    }
 }

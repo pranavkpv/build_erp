@@ -3,69 +3,63 @@ import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
 
-type UnitType = {
+type BrandType = {
   _id: string;
-  unit_name: string;
-  short_name: string;
+  brand_name:string;
 };
 
 type Unitprops = {
   editId: string;
   enable: boolean;
-  editUnit: string;
-  editShortname: string;
+  editBrandname: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: UnitType) => void; // ✅ callback for updating local state
+  onUpdate: (updated: BrandType) => void; // ✅ callback for updating local state
 };
 
-function EditUnit({
+function EditBrand({
   enable,
   setEnable,
   editId,
-  editUnit,
-  editShortname,
+  editBrandname,
   onUpdate,
 }: Unitprops) {
-  const [unit, setUnit] = useState(editUnit);
-  const [short_name, setShortname] = useState(editShortname);
-  const unitRef = useRef<HTMLParagraphElement>(null);
+  const [brand_name, setBrand_name] = useState(editBrandname);
+
+  const brandRef = useRef<HTMLParagraphElement>(null);
 
   useEffect(() => {
-    setUnit(editUnit);
-    setShortname(editShortname);
-  }, [editUnit, editShortname]);
+    setBrand_name(editBrandname);
+  }, [editBrandname]);
 
   const editSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (unit.trim() === "") {
-      unitRef.current!.innerText = "Unit is required.";
+    if (brand_name.trim() === "") {
+      brandRef.current!.innerText = "Unit is required.";
       return;
     } else {
-      unitRef.current!.innerText = "";
+      brandRef.current!.innerText = "";
     }
 
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
+      const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/brand`, {
         editId,
-        unit,
-        short_name,
+        brand_name
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        // ✅ call parent update method with new data
+   
         onUpdate({
           _id: editId,
-          unit_name: unit,
-          short_name: short_name,
+          brand_name: brand_name,
         });
         setEnable(false);
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed to update unit");
+      toast.error("Failed to update brand");
     }
   };
 
@@ -77,30 +71,20 @@ function EditUnit({
         className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md space-y-4"
         onSubmit={editSubmit}
       >
-        <h2 className="text-xl font-bold text-gray-700 text-center">Edit Unit</h2>
+        <h2 className="text-xl font-bold text-gray-700 text-center">Edit brand</h2>
 
         <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Unit Name</label>
+          <label className="block text-gray-600 font-medium">Brand Name</label>
           <input
             type="text"
-            value={unit}
+            value={brand_name}
             placeholder="Enter unit name"
-            onChange={(e) => setUnit(e.target.value)}
+            onChange={(e) => setBrand_name(e.target.value)}
             className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <p ref={unitRef} className="text-red-500 text-sm" />
+          <p ref={brandRef} className="text-red-500 text-sm" />
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Shortname</label>
-          <input
-            type="text"
-            value={short_name}
-            placeholder="Enter short name"
-            onChange={(e) => setShortname(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
 
         <div className="flex justify-end gap-3 mt-4">
           <button
@@ -122,4 +106,4 @@ function EditUnit({
   );
 }
 
-export default EditUnit;
+export default EditBrand;

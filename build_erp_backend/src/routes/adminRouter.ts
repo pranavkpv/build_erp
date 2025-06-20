@@ -2,6 +2,7 @@ import { Router } from "express";
 import { adminLogin } from "../controllers/adminController";
 import { addCategory,categoryList,editCategory,deleteCategory } from "../controllers/categoryController";
 import { addUnit,getUnit,editUnit, removeUnit } from "../controllers/unitController";
+import { addBrand, brandList, editBrand, removeBrand } from "../controllers/brandController";
 
 const router = Router()
 //login
@@ -20,12 +21,19 @@ router.delete('/category',deleteCategory)
 router.get('/unit',getUnit)
 //add unit
 router.post('/unit',addUnit)
-
 //edit unit
 router.put('/unit',editUnit)
-
 //delete unit
 router.delete('/unit',removeUnit)
+
+//brand list
+router.get('/brand',brandList)
+//add brand
+router.post('/brand',addBrand)
+//edit brand
+router.put('/brand',editBrand)
+//delete brand
+router.delete('/brand',removeBrand)
 
 
 export default router
