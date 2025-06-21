@@ -13,6 +13,6 @@ const CategorySchema: Schema = new Schema({
    description: {
       type: String
    }
-})
+},{timestamps:true})
 
 export default mongoose.model<ICategory>('Category', CategorySchema)

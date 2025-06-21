@@ -3,6 +3,8 @@ import { adminLogin } from "../controllers/adminController";
 import { addCategory,categoryList,editCategory,deleteCategory } from "../controllers/categoryController";
 import { addUnit,getUnit,editUnit, removeUnit } from "../controllers/unitController";
 import { addBrand, brandList, editBrand, removeBrand } from "../controllers/brandController";
+import { addMaterialList, editMaterialList, materialList, removeMaterial, saveMaterial, updateMaterial } from "../controllers/materialController";
+import { addProjectData, projectData, projectStatus, removeProject, saveProject, updateProject } from "../controllers/projectController";
 
 const router = Router()
 //login
@@ -26,6 +28,7 @@ router.put('/unit',editUnit)
 //delete unit
 router.delete('/unit',removeUnit)
 
+
 //brand list
 router.get('/brand',brandList)
 //add brand
@@ -34,6 +37,36 @@ router.post('/brand',addBrand)
 router.put('/brand',editBrand)
 //delete brand
 router.delete('/brand',removeBrand)
+
+
+
+//material list
+router.get('/material',materialList)
+//add material List
+router.get("/addmaterial",addMaterialList)
+//add material 
+router.post("/material",saveMaterial)
+//edit material List
+router.get("/editmaterial",editMaterialList)
+//edit material
+router.put("/material",updateMaterial)
+//delete material
+router.delete("/material",removeMaterial)
+
+
+//list project data
+router.get("/project",projectData)
+//add project Data list
+router.get("/addproject",addProjectData)
+//add project
+router.post("/project",saveProject)
+//edit project
+router.put("/project",updateProject)
+//delete project
+router.delete("/project",removeProject)
+//project status change
+router.put("/status",projectStatus)
+
 
 
 export default router

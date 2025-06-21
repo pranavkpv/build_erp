@@ -13,6 +13,6 @@ const UnitSchema: Schema = new Schema({
    short_name: {
       type: String
    }
-})
+},{timestamps:true})
 
 export default mongoose.model<IUnit>('Unit', UnitSchema)

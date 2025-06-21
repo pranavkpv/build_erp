@@ -10,6 +10,7 @@ import Category from "./components/Category/Category"
 import Dashboard from "./components/Dashboard"
 import Unit from "./components/Unit/Unit"
 import Brand from "./components/Brand/Brand"
+import Project from "./components/ProjectRegister/Projectlist"
 
 
 
@@ -27,6 +28,7 @@ function App() {
           <Route path="/admin/login" element={<Adminlogin />} />
           <Route path="/admin" element={<Adminlayout />} >
             <Route path="dashboard" element={<Dashboard />} />
+            <Route path="project" element={<Project />} />
             <Route path="category" element={<Category />} />
             <Route path="unit" element={<Unit />} />
             <Route path = "brand" element ={<Brand />} />
