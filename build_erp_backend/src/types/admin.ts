@@ -83,3 +83,18 @@ export interface editMaterialData {
 export interface deleteMaterialData {
    deleteId: string
 }
+
+export interface addLabData{
+   labour:string,
+   wage:number
+}
+
+export interface deleteLabourData{
+   _id:string
+}
+
+export interface editlabourData{
+   labourId:string,
+   labourData:string,
+   wageData:number
+}

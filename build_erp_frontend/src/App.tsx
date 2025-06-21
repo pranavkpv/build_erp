@@ -12,6 +12,7 @@ import Unit from "./components/Unit/Unit"
 import Brand from "./components/Brand/Brand"
 import Project from "./components/ProjectRegister/Projectlist"
 import Material from "./components/Material/Material"
+import Labourlist from "./components/Labour/Labourlist"
 
 
 
@@ -34,6 +35,7 @@ function App() {
             <Route path="unit" element={<Unit />} />
             <Route path = "brand" element ={<Brand />} />
             <Route path = "material" element ={<Material />} />
+            <Route path = "Labour" element = {<Labourlist />} />
           </Route>
         </Routes>
       </BrowserRouter>

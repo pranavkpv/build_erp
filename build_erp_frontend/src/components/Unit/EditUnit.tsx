@@ -54,7 +54,6 @@ function EditUnit({
 
       if (response.data.success) {
         toast.success(response.data.message);
-        // ✅ call parent update method with new data
         onUpdate({
           _id: editId,
           unit_name: unit,

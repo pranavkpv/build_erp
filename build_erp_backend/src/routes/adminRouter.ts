@@ -5,6 +5,7 @@ import { addUnit,getUnit,editUnit, removeUnit } from "../controllers/unitControl
 import { addBrand, brandList, editBrand, removeBrand } from "../controllers/brandController";
 import { addMaterialList, editMaterialList, materialList, removeMaterial, saveMaterial, updateMaterial } from "../controllers/materialController";
 import { addProjectData, projectData, projectStatus, removeProject, saveProject, updateProject } from "../controllers/projectController";
+import { getLabour, removeLabour, saveLabour, updateLabour } from "../controllers/labourController";
 
 const router = Router()
 //login
@@ -66,6 +67,16 @@ router.put("/project",updateProject)
 router.delete("/project",removeProject)
 //project status change
 router.put("/status",projectStatus)
+
+
+//list labour
+router.get("/labour",getLabour)
+//add labour
+router.post("/labour",saveLabour)
+//delete labour
+router.delete("/labour",removeLabour)
+//edit labour
+router.put("/labour",updateLabour)
 
 
 
