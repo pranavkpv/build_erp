@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard"
 import Unit from "./components/Unit/Unit"
 import Brand from "./components/Brand/Brand"
 import Project from "./components/ProjectRegister/Projectlist"
+import Material from "./components/Material/Material"
 
 
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="category" element={<Category />} />
             <Route path="unit" element={<Unit />} />
             <Route path = "brand" element ={<Brand />} />
+            <Route path = "material" element ={<Material />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -16,7 +16,7 @@ const sidebarItems = [
   },
   {
     title: "Sitemanager",
-    subs: [{head:"Sitemanager Registration",to:"/admin/sitemanager"}],
+    subs: [{head:"Sitemanager Registration",to:"/admin/sitemanager"},{head:"AddSitemanager to project",to:"/admin/addsite"}],
   },
   {
     title: "Material Management",

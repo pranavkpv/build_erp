@@ -1,12 +1,41 @@
 import BrandModel from "../models/BrandModel";
 import CategoryModel from "../models/CategoryModel";
 import MaterialModel from "../models/MaterialModel";
+import ProjectModel from "../models/ProjectModel";
 import ProjectStock from "../models/ProjectStock";
 import UnitModel from "../models/UnitModel";
 import { addMaterialData, deleteMaterialData, editMaterialData, getEditMaterialData } from "../types/admin";
 
 export const getMaterial = async () => {
-   const MaterialData = await MaterialModel.find()
+   const MaterialData = await MaterialModel.aggregate([
+      {
+         $addFields:{
+            categoryObjectId:{$toObjectId:"$category_id"},
+            unitObjectId:{$toObjectId:"$unit_id"},
+            brandObjectId:{$toObjectId:"$brand_id"}
+         }
+      },
+      {
+      $lookup:{
+         from:"categories",
+         localField:"categoryObjectId",
+         foreignField:"_id",
+         as:"categoryDetails"
+      }
+   },
+        {$lookup:{
+         from:"units",
+         localField:"unitObjectId",
+         foreignField:"_id",
+         as:"unitDetails"
+      }},
+        {$lookup:{
+         from:"brands",
+         localField:"brandObjectId",
+         foreignField:"_id",
+         as:"brandDetails"
+      }
+   }])
    return MaterialData;
 }
 
@@ -14,11 +43,19 @@ export const getAddMaterial = async () => {
    const categoryData = await CategoryModel.find()
    const brandData = await BrandModel.find()
    const unitData = await UnitModel.find()
-   return { categoryData, brandData, unitData }
+   const projectData = await ProjectModel.find()
+   return { categoryData, brandData, unitData,projectData }
 }
 
 export const addMaterial = async (data: addMaterialData) => {
    const { material_name, category_id, brand_id, unit_id, unit_rate, stock, projectWiseStock } = data
+   const existMaterial = await MaterialModel.findOne({material_name,category_id,brand_id})
+   if(existMaterial){
+      return {
+         success:false,
+         message:"material already exist"
+      }
+   }
    const newMaterial = new MaterialModel({
       material_name,
       category_id,
@@ -35,6 +72,10 @@ export const addMaterial = async (data: addMaterialData) => {
          stock:projectWiseStock[i].stock
       })
       await newProjectWiseStock.save()
+      return {
+         success:true,
+         message:"material saved successfully"
+      }
    }
 
 }
