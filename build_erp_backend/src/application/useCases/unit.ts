@@ -1,5 +1,5 @@
-import UnitModel from "../models/UnitModel"
-import { addUnitData, deletUnitData, editUnitData } from "../types/admin"
+import UnitModel from "../../models/UnitModel"
+import { addUnitData, deletUnitData, editUnitData } from "../../domain/types/admin"
 
 
 export const unitList = async()=>{

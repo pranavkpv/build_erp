@@ -1,10 +1,10 @@
-import BrandModel from "../models/BrandModel";
-import CategoryModel from "../models/CategoryModel";
-import MaterialModel from "../models/MaterialModel";
-import ProjectModel from "../models/ProjectModel";
-import ProjectStock from "../models/ProjectStock";
-import UnitModel from "../models/UnitModel";
-import { addMaterialData, deleteMaterialData, editMaterialData, getEditMaterialData } from "../types/admin";
+import BrandModel from "../../models/BrandModel";
+import CategoryModel from "../../models/CategoryModel";
+import MaterialModel from "../../models/MaterialModel";
+import ProjectModel from "../../models/ProjectModel";
+import ProjectStock from "../../models/ProjectStockModel";
+import UnitModel from "../../models/UnitModel";
+import { addMaterialData, deleteMaterialData, editMaterialData, getEditMaterialData } from "../../domain/types/admin";
 
 export const getMaterial = async () => {
    const MaterialData = await MaterialModel.aggregate([

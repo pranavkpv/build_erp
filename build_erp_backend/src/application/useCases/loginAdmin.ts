@@ -1,5 +1,5 @@
-import AdminModel from "../models/AdminModel"
-import { adminData } from "../types/admin"
+import AdminModel from "../../models/AdminModel"
+import { adminData } from "../../domain/types/admin"
 export const loginCheck = async(data:adminData)=>{
    const {username,password} = data
    const ExistAdmin = await AdminModel.findOne({username,password})

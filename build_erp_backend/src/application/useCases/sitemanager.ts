@@ -1,6 +1,6 @@
-import SitemanagerModel from "../models/SitemanagerModel";
-import { deleteSitemanagerData, Sitemanagerdata, updateSitemanagerData } from "../types/sitemanager";
-import { hashedPassword } from "../utils/hash";
+import SitemanagerModel from "../../models/SitemanagerModel";
+import { deleteSitemanagerData, Sitemanagerdata, updateSitemanagerData } from "../../domain/types/sitemanager";
+import { hashedPassword } from "../../infrastructure/utils/hash";
 
 
 

@@ -1,5 +1,5 @@
-import CategoryModel from "../models/CategoryModel";
-import { categoryData, updateCategoryData,deleteCategoryData } from "../types/admin";
+import CategoryModel from "../../models/CategoryModel";
+import { categoryData, updateCategoryData,deleteCategoryData } from "../../domain/types/admin";
 
 
 

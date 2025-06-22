@@ -1,7 +1,7 @@
 import { Mongoose } from "mongoose"
-import ProjectModel from "../models/ProjectModel"
-import Usermodel from "../models/Usermodel"
-import { addProjectData, deleteProjectData, editProjectData, statusChange } from "../types/project"
+import ProjectModel from "../../models/ProjectModel"
+import Usermodel from "../../models/Usermodel"
+import { addProjectData, deleteProjectData, editProjectData, statusChange } from "../../domain/types/project"
 
 export const projectList = async()=>{
    const projectData = await ProjectModel.aggregate([

@@ -1,5 +1,5 @@
-import labourModel from "../models/labourModel"
-import { addLabData, deleteLabourData, editlabourData } from "../types/admin"
+import labourModel from "../../models/LabourModel"
+import { addLabData, deleteLabourData, editlabourData } from "../../domain/types/admin"
 
 export const labourDatalist = async () => {
    try {

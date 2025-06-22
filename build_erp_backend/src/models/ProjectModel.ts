@@ -1,15 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { Project } from "../domain/types/project";
 
-export interface IProject extends Document {
-  project_name: string;
-  user_id: string;
-  description: string;
-  status: "pending" | "processing" | "completed";
-  sitemanager_id: string;
-  start_date: Date;
-  end_date: Date;
-  expected_image: string;
-  finalImage: string;
+export interface IProject extends Project, Document {
+  _id:string
 }
 
 const ProjectSchema: Schema = new Schema(
@@ -62,4 +55,5 @@ const ProjectSchema: Schema = new Schema(
   { timestamps: true }
 );
 
-export default mongoose.model<IProject>("Project", ProjectSchema);
+const ProjectModel = mongoose.model<IProject>("Project", ProjectSchema);
+export default ProjectModel

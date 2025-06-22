@@ -1,10 +1,10 @@
 import { Request,Response } from "express"
-import { listSitemanager,saveSitemanager,updateSitemanager,removeSitemanager } from "../services/sitemanager"
+import { deleteUnit, saveUnit, unitList,updateUnit } from "../../../application/useCases/unit"
 
 
-export const getSitemanager = async(req:Request,res:Response)=>{
+export const getUnit = async(req:Request,res:Response)=>{
    try {
-      const result = await listSitemanager()
+      const result = await unitList()
       res.status(200).json(result)
    } catch (error:any) {
       console.log(error)
@@ -13,9 +13,9 @@ export const getSitemanager = async(req:Request,res:Response)=>{
 }
 
 
-export const addSitemanager = async(req:Request,res:Response)=>{
+export const addUnit = async(req:Request,res:Response)=>{
    try {
-      const result = await saveSitemanager(req.body)
+      const result = await saveUnit(req.body)
       res.status(201).json(result)
    } catch (error:any) {
       console.log(error)
@@ -24,9 +24,9 @@ export const addSitemanager = async(req:Request,res:Response)=>{
 }
 
 
-export const editSitemanaget = async(req:Request,res:Response)=>{
+export const editUnit = async(req:Request,res:Response)=>{
    try {
-      const result = await updateSitemanager(req.body)
+      const result = await updateUnit(req.body)
       res.status(200).json(result)
    } catch (error:any) {
       console.log(error)
@@ -34,9 +34,9 @@ export const editSitemanaget = async(req:Request,res:Response)=>{
    }
 }
 
-export const deleteSitemanager = async(req:Request,res:Response)=>{
+export const removeUnit = async(req:Request,res:Response)=>{
    try {
-      const result = await removeSitemanager(req.body)
+      const result = await deleteUnit(req.body)
        res.status(200).json(result)
    } catch (error:any) {
       console.log(error)

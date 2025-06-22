@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { Unit } from "../domain/types/unit";
 
-export interface IUnit extends Document {
-   unit_name: string,
-   short_name: string,
+export interface IUnit extends Unit, Document {
+  _id:string
 }
 
 const UnitSchema: Schema = new Schema({
@@ -15,4 +15,5 @@ const UnitSchema: Schema = new Schema({
    }
 },{timestamps:true})
 
-export default mongoose.model<IUnit>('Unit', UnitSchema)
+const UnitModel= mongoose.model<IUnit>('Unit', UnitSchema)
+export default UnitModel

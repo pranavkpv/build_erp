@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { signUp,OTPVerify,resend,ValidLogin } from "../services/signupUser";
+import { signUp,OTPVerify,resend,ValidLogin } from "../../../application/useCases/signupUser";
 
 //otp generate and stored tempUser controller
 export const sign = async(req:Request,res:Response)=>{

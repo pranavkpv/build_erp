@@ -1,8 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { Labour } from "../domain/types/labour";
 
-export interface ILabour extends Document {
-   labour_type:string,
-   daily_wage:number
+export interface ILabour extends Labour, Document {
+  _id:string
 }
 
 const LabourSchema: Schema = new Schema({
@@ -16,4 +16,5 @@ const LabourSchema: Schema = new Schema({
    }
 },{timestamps:true})
 
-export default mongoose.model<ILabour>('Labour', LabourSchema)
+const LabourModel =  mongoose.model<ILabour>('Labour', LabourSchema)
+export default LabourModel

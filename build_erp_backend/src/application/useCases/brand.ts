@@ -1,5 +1,5 @@
-import BrandModel from "../models/BrandModel";
-import { addBrandData, deletUnitData, editBrandData } from "../types/admin";
+import BrandModel from "../../models/BrandModel";
+import { addBrandData, deletUnitData, editBrandData } from "../../domain/types/admin";
 
 export const getBrand = async()=>{
    const brandData = await BrandModel.find()

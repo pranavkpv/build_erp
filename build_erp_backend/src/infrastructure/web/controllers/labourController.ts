@@ -1,5 +1,5 @@
 import { Request,Response } from "express"
-import { addLabourData, deleteLabour, editLabour, labourDatalist } from "../services/labour"
+import { addLabourData, deleteLabour, editLabour, labourDatalist } from "../../../application/useCases/labour"
 export const getLabour =async(req:Request,res:Response)=>{
    try {
       const result = await labourDatalist()

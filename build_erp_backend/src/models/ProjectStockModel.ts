@@ -1,9 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { ProjectStock } from "../domain/types/material";
 
-export interface IStock extends Document {
-   project_id:string,
-   material_id : string,
-   stock :number
+export interface IStock extends ProjectStock, Document {
+   _id:string
 }
 
 const StockSchema: Schema = new Schema({
@@ -18,4 +17,5 @@ const StockSchema: Schema = new Schema({
    }
 },{timestamps:true})
 
-export default mongoose.model<IStock>('Stock', StockSchema)
+ const ProjectStockModel = mongoose.model<IStock>('Stock', StockSchema)
+ export default ProjectStockModel

@@ -1,5 +1,5 @@
 import { Request,Response } from "express"
-import { saveCategory,listCategory,updateCategory,removeCategory } from "../services/category"
+import { saveCategory,listCategory,updateCategory,removeCategory } from "../../../application/useCases/category"
 
 export const categoryList = async(req:Request,res:Response)=>{
    try {

@@ -1,13 +1,8 @@
 import mongoose, { Schema,Document } from "mongoose";
+import { User } from "../domain/types/user";
 
-export interface ITempUser extends Document{
-   username:string,
-   email:string,
-   phone:string,
-   password:string,
-   otp:String,
-   createdAt:Date,
-   otpCreatedAt:Date
+export interface ITempUser extends User, Document{
+   _id:string,
 }
 
 const TempUserSchema:Schema = new Schema({
@@ -37,4 +32,5 @@ const TempUserSchema:Schema = new Schema({
    }
 })
 
-export default mongoose.model<ITempUser>('TempUser',TempUserSchema)
+const TempUsermodel = mongoose.model<ITempUser>('TempUser',TempUserSchema)
+export default TempUsermodel

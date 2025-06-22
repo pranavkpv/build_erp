@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addMaterial, deleteMaterial, editMaterial, getAddMaterial, getEditMaterial, getMaterial } from "../services/material"
+import { addMaterial, deleteMaterial, editMaterial, getAddMaterial, getEditMaterial, getMaterial } from "../../../application/useCases/material"
 
 export const materialList = async (req: Request, res: Response) => {
    try {

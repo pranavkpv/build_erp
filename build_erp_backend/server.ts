@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import userRouter from './src/routes/userRouter'
-import adminRouter from './src/routes/adminRouter'
+import userRouter from './src/infrastructure/web/routes/userRouter'
+import adminRouter from './src/infrastructure/web/routes/adminRouter'
 import { connectDB } from './src/config/db';
 require("dotenv").config();
 

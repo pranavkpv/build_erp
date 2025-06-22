@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { getBrand, deleteBrand, saveBrand, updateBrand } from "../services/brand"
+import { getBrand, deleteBrand, saveBrand, updateBrand } from "../../../application/useCases/brand"
 
 
 

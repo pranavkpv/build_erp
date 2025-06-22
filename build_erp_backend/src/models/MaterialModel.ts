@@ -1,12 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { Material } from "../domain/types/material";
 
-export interface IMaterial extends Document {
-   material_name:string,
-   category_id : string,
-   brand_id : string,
-   unit_id : string,
-   unit_rate : number,
-   stock : number
+export interface IMaterial  extends Material, Document {
+  _id:string
 }
 
 const MaterialSchema: Schema = new Schema({
@@ -36,4 +32,5 @@ const MaterialSchema: Schema = new Schema({
    }
 },{timestamps:true})
 
-export default mongoose.model<IMaterial>('Material', MaterialSchema)
+const MaterialModel =  mongoose.model<IMaterial>('Material', MaterialSchema)
+export default MaterialModel

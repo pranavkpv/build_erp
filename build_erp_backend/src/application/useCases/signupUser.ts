@@ -1,8 +1,8 @@
-import Usermodel from "../models/Usermodel";
-import { signupUser, OTP, Email,LoginData } from "../types/user"
-import { hashedPassword,comparedPassword } from "../utils/hash";
-import TempUsermodel from "../models/TempUsermodel";
-import { sendEmail } from "../utils/sendEmail";
+import Usermodel from "../../models/Usermodel";
+import { signupUser, OTP, Email,LoginData } from "../../domain/types/user"
+import { hashedPassword,comparedPassword } from "../../infrastructure/utils/hash";
+import TempUsermodel from "../../models/TempUsermodel";
+import { sendEmail } from "../../infrastructure/utils/sendEmail";
 
 
 

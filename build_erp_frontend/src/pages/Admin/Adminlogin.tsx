@@ -8,14 +8,14 @@ function Adminlogin() {
   const passRef = useRef<HTMLParagraphElement>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); // Changed variable name to follow common conventions
+  const navigate = useNavigate(); 
 
   const loginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let hasError = false; // Flag to track validation errors
+    let hasError = false; 
 
-    // Validate username
+   
     if (username.trim() === "") {
       if (userRef.current) {
         userRef.current.innerText = "Username is required.";
@@ -27,7 +27,7 @@ function Adminlogin() {
       }
     }
 
-    // Validate password
+   
     if (password.trim() === "") {
       if (passRef.current) {
         passRef.current.innerText = "Password is required.";
@@ -39,7 +39,7 @@ function Adminlogin() {
       }
     }
 
-    // If there are validation errors, stop the submission
+   
     if (hasError) {
       return;
     }
@@ -55,14 +55,13 @@ function Adminlogin() {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        // Using navigate directly without a setTimeout for immediate redirection.
-        // If you specifically need a delay, re-add setTimeout.
+       
         navigate("/admin/dashboard");
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.error("Login error:", error); // Log the actual error for debugging
+      console.error("Login error:", error);
       toast.error("An error occurred during login. Please try again.");
     }
   };
@@ -86,7 +85,7 @@ function Adminlogin() {
             id="username"
             placeholder="Enter your username"
             onChange={(e) => setUsername(e.target.value)}
-            value={username} // Make it a controlled component
+            value={username} 
             className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
           <p ref={userRef} className="text-red-400 text-sm mt-1"></p>
@@ -97,11 +96,11 @@ function Adminlogin() {
             Password
           </label>
           <input
-            type="text" // Use type="password" for password fields
+            type="text" 
             id="password"
             placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
-            value={password} // Make it a controlled component
+            value={password} 
             className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
           <p ref={passRef} className="text-red-400 text-sm mt-1"></p>

@@ -1,5 +1,5 @@
 import { Request,Response } from "express";
-import { loginCheck } from "../services/loginAdmin";
+import { loginCheck } from "../../../application/useCases/loginAdmin";
 
 
 export const adminLogin = async(req:Request,res:Response)=>{

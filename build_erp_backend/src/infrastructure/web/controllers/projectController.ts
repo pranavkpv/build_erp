@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { addProject, changeStatus, deletProject, editProject, getAddproject, projectList } from "../services/project"
+import { addProject, changeStatus, deletProject, editProject, getAddproject, projectList } from "../../../application/useCases/project"
 
 export const projectData = async (req: Request, res: Response) => {
    try {

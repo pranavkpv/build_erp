@@ -1,9 +1,8 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { Sitemanager } from "../domain/types/sitemanager";
 
-export interface ISitemanager extends Document {
-   username:string,
-   email:string,
-   password:string
+export interface ISitemanager extends Sitemanager, Document {
+   _id:string
 }
 
 const SitemanagerSchema: Schema = new Schema({
@@ -21,4 +20,5 @@ const SitemanagerSchema: Schema = new Schema({
    }
 },{timestamps:true})
 
-export default mongoose.model<ISitemanager>('Sitemanager', SitemanagerSchema)
+const SitemanagerModel = mongoose.model<ISitemanager>('Sitemanager', SitemanagerSchema)
+export default SitemanagerModel
