@@ -13,6 +13,7 @@ import Brand from "./components/Brand/Brand"
 import Project from "./components/ProjectRegister/Projectlist"
 import Material from "./components/Material/Material"
 import Labourlist from "./components/Labour/Labourlist"
+import SitemanagerList from "./components/Sitemanager/SitemanagerList"
 
 
 
@@ -36,6 +37,7 @@ function App() {
             <Route path = "brand" element ={<Brand />} />
             <Route path = "material" element ={<Material />} />
             <Route path = "Labour" element = {<Labourlist />} />
+            <Route path ="Sitemanager" element = {< SitemanagerList />} />
           </Route>
         </Routes>
       </BrowserRouter>

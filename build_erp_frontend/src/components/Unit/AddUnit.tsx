@@ -5,87 +5,98 @@ import { toast } from "react-toastify";
 type Unitprops = {
   enable: boolean;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onAdd: (unit: { _id: string; unit_name: string,short_name:string }) => void;
+  onAdd: (unit: { _id: string; unit_name: string; short_name: string }) => void;
 };
 
-function AddUnit({ enable, setEnable,onAdd }: Unitprops) {
+function AddUnit({ enable, setEnable, onAdd }: Unitprops) {
   const [unit, setUnit] = useState("");
-  const [shortname, setShortname] = useState("");
+  const [short_name, setShortname] = useState("");
   const unitRef = useRef<HTMLParagraphElement>(null);
+  const shortnameRef = useRef<HTMLParagraphElement>(null);
 
-  const addCategory = async (e: React.FormEvent) => {
+  const addUnit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    let hasError = false;
+
     if (unit.trim() === "") {
-      if (unitRef.current) {
-        unitRef.current.innerText = "Unit is required. Please enter your Unit.";
-      }
-      return;
-    } else {
-      if (unitRef.current) unitRef.current.innerText = "";
+      if (unitRef.current) unitRef.current.innerText = "Unit name is required.";
+      hasError = true;
+    } else if (unitRef.current) {
+      unitRef.current.innerText = "";
     }
+
+    if (short_name.trim() === "") {
+      if (shortnameRef.current) shortnameRef.current.innerText = "Short name is required.";
+      hasError = true;
+    } else if (shortnameRef.current) {
+      shortnameRef.current.innerText = "";
+    }
+
+    if (hasError) return;
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
         unit,
-        shortname
+        short_name,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onAdd(response.data.data); 
+        onAdd(response.data.data);
         setEnable(false);
       } else {
         toast.error(response.data.message);
       }
     } catch (err) {
-      console.log(err)
-      toast.error("Server error");
+      console.error(err);
+      toast.error("Failed to add unit");
     }
   };
 
   if (!enable) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-900/80 z-50 flex items-center justify-center p-4">
       <form
-        onSubmit={addCategory}
-        className="bg-white p-6 rounded-xl shadow-lg w-full max-w-md space-y-4"
+        onSubmit={addUnit}
+        className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-md p-6 sm:p-8 border border-gray-700/50 space-y-5"
       >
-        <h2 className="text-xl font-semibold text-center text-gray-700">Add unit</h2>
+        <h2 className="text-xl font-semibold text-center text-gray-100 mb-6">Add Unit</h2>
 
-        <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">unit Name</label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-200 mb-1.5">Unit Name</label>
           <input
             type="text"
             placeholder="Enter unit name"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
             onChange={(e) => setUnit(e.target.value)}
           />
-          <p ref={unitRef} className="text-red-500 text-sm mt-1" />
+          <p ref={unitRef} className="text-sm text-red-400 mt-1.5"></p>
         </div>
 
-        <div>
-          <label className="block mb-1 text-sm font-medium text-gray-600">shortname</label>
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-gray-200 mb-1.5">Short Name</label>
           <input
             type="text"
-            placeholder="Enter shortname"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            placeholder="Enter short name"
+            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
             onChange={(e) => setShortname(e.target.value)}
           />
+          <p ref={shortnameRef} className="text-sm text-red-400 mt-1.5"></p>
         </div>
 
-        <div className="flex justify-end gap-3 pt-2">
+        <div className="flex justify-end gap-4 pt-4">
           <button
             type="button"
+            className="bg-gray-600/90 hover:bg-gray-700 text-gray-100 px-4 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
             onClick={() => setEnable(false)}
-            className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="bg-teal-500/90 hover:bg-teal-600 text-white px-4 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
           >
             Save
           </button>

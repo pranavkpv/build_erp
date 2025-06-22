@@ -6,6 +6,7 @@ import { addBrand, brandList, editBrand, removeBrand } from "../controllers/bran
 import { addMaterialList, editMaterialList, materialList, removeMaterial, saveMaterial, updateMaterial } from "../controllers/materialController";
 import { addProjectData, projectData, projectStatus, removeProject, saveProject, updateProject } from "../controllers/projectController";
 import { getLabour, removeLabour, saveLabour, updateLabour } from "../controllers/labourController";
+import { addSitemanager, deleteSitemanager, editSitemanaget, getSitemanager } from "../controllers/sitemanagerController";
 
 const router = Router()
 //login
@@ -77,6 +78,15 @@ router.post("/labour",saveLabour)
 router.delete("/labour",removeLabour)
 //edit labour
 router.put("/labour",updateLabour)
+
+//list sitemanager
+router.get("/sitemanager",getSitemanager)
+//add sitemanager
+router.post("/sitemanager",addSitemanager)
+//edit sitemanager
+router.put("/sitemanager",editSitemanaget)
+//delete sitemanager
+router.delete("/sitemanager",deleteSitemanager)
 
 
 

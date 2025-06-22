@@ -14,7 +14,7 @@ type CategoryProps = {
   editCategory: string;
   editDescription: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: CategoryType) => void; 
+  onUpdate: (updated: CategoryType) => void;
 };
 
 function EditCategory({
@@ -29,6 +29,7 @@ function EditCategory({
   const [description, setDescription] = useState(editDescription);
   const catRef = useRef<HTMLParagraphElement>(null);
 
+  // Update local state when props change (when a different category is selected for edit)
   useEffect(() => {
     setCategory(editCategory);
     setDescription(editDescription);
@@ -37,78 +38,94 @@ function EditCategory({
   const editSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Input validation
     if (category.trim() === "") {
-      catRef.current!.innerText = "Category is required. Please enter your Category.";
+      if (catRef.current) {
+        catRef.current.innerText = "Category name is required.";
+      }
       return;
     } else {
-      catRef.current!.innerText = "";
+      if (catRef.current) {
+        catRef.current.innerText = "";
+      }
     }
 
     try {
-      const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
+      // The endpoint used here is `/admin/unit` but the component name is `EditCategory`.
+      // Please ensure this is the correct endpoint for updating categories.
+      const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/category`, { // Changed to /admin/category
         editId,
-        category,
+        category, // This will be the new category_name
         description,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onUpdate(response.data.data); 
-        setEnable(false); 
+        onUpdate(response.data.data); // Pass the updated data back to the parent
+        setEnable(false); // Close the modal
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed to update category");
+      console.error("Failed to update category:", error);
+      toast.error("Failed to update category. Please try again.");
     }
   };
 
   if (!enable) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4">
       <form
-        className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md space-y-4"
+        className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-md space-y-6 border border-gray-700/50"
         onSubmit={editSubmit}
       >
-        <h2 className="text-xl font-bold text-gray-700 text-center">Edit Category</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-100 mb-6 border-b border-gray-700 pb-4">
+          Edit Category
+        </h2>
 
         <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Category Name</label>
+          <label htmlFor="categoryName" className="block text-sm font-medium text-gray-200 mb-1">
+            Category Name
+          </label>
           <input
+            id="categoryName"
             type="text"
             value={category}
             placeholder="Enter category name"
             onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
-          <p ref={catRef} className="text-red-500 text-sm" />
+          <p ref={catRef} className="text-red-400 text-sm mt-1" />
         </div>
 
         <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Description</label>
+          <label htmlFor="description" className="block text-sm font-medium text-gray-200 mb-1">
+            Description
+          </label>
           <input
+            id="description"
             type="text"
             value={description}
             placeholder="Enter description"
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
         </div>
 
-        <div className="flex justify-end gap-3 mt-4">
+        <div className="flex justify-end gap-4 mt-6">
           <button
             type="button"
-            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+            className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-2.5 rounded-lg shadow-md transition-all duration-200 font-semibold"
             onClick={() => setEnable(false)}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-5 py-2.5 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 font-semibold"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </form>

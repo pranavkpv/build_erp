@@ -2,18 +2,17 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-
 type BrandType = {
   _id: string;
-  brand_name:string;
+  brand_name: string;
 };
 
-type Unitprops = {
+type EditBrandProps = { // Renamed Unitprops to EditBrandProps for clarity
   editId: string;
   enable: boolean;
   editBrandname: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: BrandType) => void; // ✅ callback for updating local state
+  onUpdate: (updated: BrandType) => void;
 };
 
 function EditBrand({
@@ -22,11 +21,11 @@ function EditBrand({
   editId,
   editBrandname,
   onUpdate,
-}: Unitprops) {
+}: EditBrandProps) {
   const [brand_name, setBrand_name] = useState(editBrandname);
-
   const brandRef = useRef<HTMLParagraphElement>(null);
 
+  // Update local state when props change (when a different brand is selected for edit)
   useEffect(() => {
     setBrand_name(editBrandname);
   }, [editBrandname]);
@@ -34,71 +33,80 @@ function EditBrand({
   const editSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    // Input validation
     if (brand_name.trim() === "") {
-      brandRef.current!.innerText = "Unit is required.";
+      if (brandRef.current) {
+        brandRef.current.innerText = "Brand name is required.";
+      }
       return;
     } else {
-      brandRef.current!.innerText = "";
+      if (brandRef.current) {
+        brandRef.current.innerText = "";
+      }
     }
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/brand`, {
         editId,
-        brand_name
+        brand_name,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-   
-        onUpdate({
+        onUpdate({ // Callback to update the parent component's state
           _id: editId,
           brand_name: brand_name,
         });
-        setEnable(false);
+        setEnable(false); // Close the modal
       } else {
         toast.error(response.data.message);
       }
     } catch (error) {
-      toast.error("Failed to update brand");
+      console.error("Failed to update brand:", error);
+      toast.error("Failed to update brand. Please try again.");
     }
   };
 
-  if (!enable) return null;
+  if (!enable) return null; // Render nothing if the modal is not enabled
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4">
       <form
-        className="bg-white rounded-xl shadow-xl p-6 w-full max-w-md space-y-4"
+        className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-md space-y-6 border border-gray-700/50"
         onSubmit={editSubmit}
       >
-        <h2 className="text-xl font-bold text-gray-700 text-center">Edit brand</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-100 mb-6 border-b border-gray-700 pb-4">
+          Edit Brand
+        </h2>
 
         <div className="space-y-2">
-          <label className="block text-gray-600 font-medium">Brand Name</label>
+          <label htmlFor="brandName" className="block text-sm font-medium text-gray-200 mb-1">
+            Brand Name
+          </label>
           <input
+            id="brandName"
             type="text"
             value={brand_name}
-            placeholder="Enter unit name"
+            placeholder="Enter brand name"
             onChange={(e) => setBrand_name(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
-          <p ref={brandRef} className="text-red-500 text-sm" />
+          <p ref={brandRef} className="text-red-400 text-sm mt-1" />
         </div>
 
-
-        <div className="flex justify-end gap-3 mt-4">
+        <div className="flex justify-end gap-4 mt-6">
           <button
             type="button"
-            className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded"
+            className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-2.5 rounded-lg shadow-md transition-all duration-200 font-semibold"
             onClick={() => setEnable(false)}
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+            className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-5 py-2.5 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 font-semibold"
           >
-            Save
+            Save Changes
           </button>
         </div>
       </form>
