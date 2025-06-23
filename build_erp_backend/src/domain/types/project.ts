@@ -1,3 +1,5 @@
+import { User } from "./user"
+
 export interface Project {
    _id: string
    project_name: string
@@ -22,17 +24,13 @@ export interface addProjectInput {
    project_name: string,
    user_id: string,
    address: string,
-   mobile_number: string,
+   mobile_number: number,
    email: string,
    area: string,
    description: string
 }
 
-//output of add project
-export interface addProjectOutput{
-   success:boolean,
-   message:string
-}
+
 //input of edit project
 export interface editProjectInput {
    _id: string
@@ -45,22 +43,14 @@ export interface editProjectInput {
    description: string
 }
 
-// output of edit project
-export interface editProjectOutput{
-   success:boolean,
-   message:string
-}
+
 
 //delete project input
 export interface deleteProjectInput {
    _id: string
 }
 
-//delete project output
-export interface editProjectOutput{
-   success:boolean,
-   message:string
-}
+
 
 //status change input
 export interface statusChangeInput {
@@ -69,14 +59,43 @@ export interface statusChangeInput {
 }
 
 //status change output
-export interface statusChangeOutput{
+export interface outputProject{
    success:boolean,
    message:string
 }
 
-//general error
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
+
+export interface addProjectStockInput {
+   project_id: string,
+   material_id: string,
+   stock: number
+}
+
+export interface editProjectStockData{
+   _id:string
+   project_id: string,
+   material_id: string,
+   stock: number,
+   createdAt:Date,
+   updatedAt:Date
+}
+
+export interface getProjectListData{
+   _id: string
+   project_name: string
+   user_id: string
+   address:string
+   mobile_number:number
+   email:string
+   description: string
+   area:number
+   status: string[]
+   sitemanager_id: string
+   start_date : Date
+   end_date : Date
+   expected_image: string
+   finalImage: string
+   createdAt:Date
+   updatedAt:Date
+   userDetails:User[]
 }

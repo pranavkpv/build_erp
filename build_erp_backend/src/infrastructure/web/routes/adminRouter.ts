@@ -1,93 +1,68 @@
+
 import { Router } from "express";
-import { adminLogin } from "../controllers/adminController";
-import { addCategory,categoryList,editCategory,deleteCategory } from "../controllers/categoryController";
-import { addUnit,getUnit,editUnit, removeUnit } from "../controllers/unitController";
-import { addBrand, brandList, editBrand, removeBrand } from "../controllers/brandController";
-import { addMaterialList, editMaterialList, materialList, removeMaterial, saveMaterial, updateMaterial } from "../controllers/materialController";
-import { addProjectData, projectData, projectStatus, removeProject, saveProject, updateProject } from "../controllers/projectController";
-import { getLabour, removeLabour, saveLabour, updateLabour } from "../controllers/labourController";
-import { addSitemanager, deleteSitemanager, editSitemanaget, getSitemanager } from "../controllers/sitemanagerController";
-
-const router = Router()
-//login
-router.post('/login',adminLogin)
-//get category data
-router.get('/category',categoryList)
-//add category
-router.post('/category',addCategory)
-//edit category
-router.put('/category',editCategory)
-//delete category
-router.delete('/category',deleteCategory)
-
-
-//get unit data
-router.get('/unit',getUnit)
-//add unit
-router.post('/unit',addUnit)
-//edit unit
-router.put('/unit',editUnit)
-//delete unit
-router.delete('/unit',removeUnit)
-
-
-//brand list
-router.get('/brand',brandList)
-//add brand
-router.post('/brand',addBrand)
-//edit brand
-router.put('/brand',editBrand)
-//delete brand
-router.delete('/brand',removeBrand)
+import { adminController } from "../controllers/adminController";
+import { brandController } from "../controllers/brandController";
+import { CategoryController } from "../controllers/categoryController";
+import { LabourController } from "../controllers/labourController";
+import { MaterialController } from "../controllers/materialController";
+import { ProjectController } from "../controllers/projectController";
+import {  SitemanagerController } from "../controllers/sitemanagerController";
+import { UnitController } from "../controllers/unitController";
 
 
 
-//material list
-router.get('/material',materialList)
-//add material List
-router.get("/addmaterial",addMaterialList)
-//add material 
-router.post("/material",saveMaterial)
-//edit material List
-router.get("/editmaterial",editMaterialList)
-//edit material
-router.put("/material",updateMaterial)
-//delete material
-router.delete("/material",removeMaterial)
+const createAdminRoute = (adminController: adminController,
+   categoryController: CategoryController, unitController: UnitController,
+   brandController: brandController, materialController: MaterialController,
+   projectController: ProjectController, labourController: LabourController,
+   sitemanagerController : SitemanagerController
+
+): Router => {
+   const router = Router()
+   router.post('/login', adminController.login)
+
+   router.get('/category', categoryController.categoryList)
+   router.post('/category', categoryController.addCategory)
+   router.put('/category', categoryController.editCategory)
+   router.delete('/category', categoryController.deleteCategory)
+
+   router.get('/unit', unitController.getUnit)
+   router.post('/unit', unitController.addUnit)
+   router.put('/unit', unitController.editUnit)
+   router.delete('/unit', unitController.removeUnit)
+
+   router.get('/brand', brandController.brandList)
+   router.post('/brand', brandController.addBrand)
+   router.put('/brand', brandController.editBrand)
+   router.delete('/brand', brandController.removeBrand)
+
+   router.get('/material', materialController.materialList)
+   router.get("/addmaterial", materialController.addMaterialList)
+   router.post("/material", materialController.saveMaterial)
+   router.get("/editmaterial", materialController.editMaterialList)
+   router.put("/material", materialController.editMaterialList)
+   router.delete("/material", materialController.removeMaterial)
+
+   router.get("/project", projectController.projectData)
+   router.get("/addproject", projectController.addProjectdata)
+   router.post("/project", projectController.saveProject)
+   router.put("/project", projectController.updateProject)
+   router.delete("/project", projectController.removeProject)
+   router.put("/status", projectController.projectStatus)
+
+   router.get("/labour", labourController.getLabour)
+   router.post("/labour", labourController.saveLabour)
+   router.delete("/labour", labourController.removeLabour)
+   router.put("/labour", labourController.updateLabour)
+
+   router.get("/sitemanager",sitemanagerController.getSitemanager)
+   router.post("/sitemanager",sitemanagerController.addSitemanager)
+   router.put("/sitemanager",sitemanagerController.editSitemanager)
+   router.delete("/sitemanager",sitemanagerController.deleteSitemanager)
 
 
-//list project data
-router.get("/project",projectData)
-//add project Data list
-router.get("/addproject",addProjectData)
-//add project
-router.post("/project",saveProject)
-//edit project
-router.put("/project",updateProject)
-//delete project
-router.delete("/project",removeProject)
-//project status change
-router.put("/status",projectStatus)
+   return router
+}
 
 
-//list labour
-router.get("/labour",getLabour)
-//add labour
-router.post("/labour",saveLabour)
-//delete labour
-router.delete("/labour",removeLabour)
-//edit labour
-router.put("/labour",updateLabour)
-
-//list sitemanager
-router.get("/sitemanager",getSitemanager)
-//add sitemanager
-router.post("/sitemanager",addSitemanager)
-//edit sitemanager
-router.put("/sitemanager",editSitemanaget)
-//delete sitemanager
-router.delete("/sitemanager",deleteSitemanager)
-
-
-
-export default router
+export default createAdminRoute

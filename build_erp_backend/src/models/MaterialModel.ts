@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
-import { Material } from "../domain/types/material";
+import {  MaterialList } from "../domain/types/material";
 
-export interface IMaterial  extends Material, Document {
+export interface IMaterial  extends MaterialList, Document {
   _id:string
 }
 

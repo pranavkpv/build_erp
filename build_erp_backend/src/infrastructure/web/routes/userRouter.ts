@@ -1,13 +1,12 @@
 import { Router } from "express";
-import { sign,verifyOTP,resendOtp,login } from "../controllers/userController"
-const router = Router()
+import { AuthController } from "../controllers/AuthController";
+const createAuthRoute = (authcontroller:AuthController):Router=>{
+   const router = Router()
+   router.post('/signup',authcontroller.signUp)
+   router.post('/verifyOtp',authcontroller.verifyOTP)
+   router.post('/resendOtp',authcontroller.resendOtp)
+   router.post('/login',authcontroller.login)
+   return router
+}
 
-
-router.post('/signup',sign)
-router.post('/verifyOtp',verifyOTP)
-router.post('/resendOtp',resendOtp)
-
-//login route
-router.post('/login',login)
-
-export default router;
+export default createAuthRoute;

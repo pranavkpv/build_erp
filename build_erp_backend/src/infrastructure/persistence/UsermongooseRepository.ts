@@ -1,0 +1,43 @@
+import { IUserRepository } from "../../domain/repositories/IUserRepository";
+import { User } from "../../domain/types/user";
+import TempUsermodel from "../../models/TempUsermodel";
+import UserModel from "../../models/Usermodel";
+export class UsermongooseRepository implements IUserRepository {
+   async findUserByEmail(email: string): Promise<User | null> {
+      const existUser = await UserModel.findOne({ email })
+      return existUser ? (existUser as User) : null
+   }
+   async findUserByPhone(phone: number): Promise<User | null> {
+      const existPhone = await UserModel.findOne({ phone })
+      return existPhone ? (existPhone as User) : null
+   }
+   async saveUser(user: Omit<User, "_id" | "profile_image" | "otp" | "otpCreatedAt" | "createdAt" | "updatedAt">): Promise<User> {
+      const newUser = new UserModel(user)
+      const savedUser = await newUser.save()
+      return savedUser.toObject() as User
+   }
+   async otpSave(user: Omit<User, "_id" | "profile_image" | "updatedAt" | "createdAt">): Promise<User> {
+      const newTempUser = new TempUsermodel(user)
+      const savedUser = await newTempUser.save()
+      return savedUser.toObject() as User
+   }
+   async findTempUserByEmailAndOTP(email: string, otp: string): Promise<User | null> {
+      const ExistUser = await TempUsermodel.findOne({ email, otp })
+      return ExistUser ? (ExistUser as User) : null
+   }
+   async findTempUserByEmail(email: string): Promise<User | null> {
+      const existEmail = await TempUsermodel.findOne({ email })
+      return existEmail ? (existEmail as User) : null
+   }
+   async deleteTempUserByEmail(email: string): Promise<void> {
+      await TempUsermodel.deleteOne({ email })
+   }
+   async findTempUserByEmailAndUpdateOTP(email: string, otp: number, otpCreatedAt: Date): Promise<User | null> {
+      const ResendTemp = await TempUsermodel.findOneAndUpdate({ email: email }, { $set: { otp: otp, otpCreatedAt: Date.now() } })
+      return ResendTemp?.toObject() as User
+   }
+   async findAllUser(): Promise<User[] | []> {
+      const userData = await UserModel.find();
+      return userData ? userData : []
+   }
+}

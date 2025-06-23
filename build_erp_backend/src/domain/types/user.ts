@@ -1,21 +1,22 @@
 //core User Entity
 export interface User {
-  _id: string; 
+  _id?: string; 
   username: string;
   email: string;
-  phone: string;
+  phone: number;
   password: string; 
-  otp: string; 
-  otpCreatedAt: Date; 
+  profile_image?:string
+  otp?: number; 
+  otpCreatedAt?: Date; 
   createdAt: Date;
-  updatedAt: Date;
+  updatedAt?: Date;
 }
 
 //user signup use case
 export interface userSignupInput{
    username:string,
    email:string,
-   phone:string,
+   phone:number,
    password:string  // plain password
 }
 
@@ -39,7 +40,7 @@ export interface OTPOutput{
 
 //input of resendOTP
 export interface ResendOTPInput{
-   otpEmail:string
+   email:string
 }
 
 //output of resendOTP
@@ -62,8 +63,3 @@ export interface loginOutput{
 }
 
 
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
-}

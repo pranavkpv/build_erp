@@ -1,64 +1,94 @@
-import { Request, Response } from "express"
-import { addMaterial, deleteMaterial, editMaterial, getAddMaterial, getEditMaterial, getMaterial } from "../../../application/useCases/material"
+import { NextFunction, Request, Response } from "express"
+import { DisplayAllMaterialUseCase } from "../../../useCases/DisplayAllMaterialUseCase"
+import { AddMaterialUseCase } from "../../../useCases/AddMaterialUseCase"
+import { DisplayAddMaterialDataUseCase } from "../../../useCases/DisplayAddMaterialUseCase"
+import { GetEditMaterialUseCase } from "../../../useCases/GetEditMaterialUseCase"
+import { UpdateMaterialUseCase } from "../../../useCases/UpdateMaterialUseCase"
+import { DeleteMaterialUseCase } from "../../../useCases/DeleteMaterialUseCase"
 
-export const materialList = async (req: Request, res: Response) => {
-   try {
-      const result = await getMaterial()
-      res.status(200).json(result)
-   } catch (error: any) {
-      console.log(error)
-      res.status(400).json(error.message)
+
+export class MaterialController {
+   private displayAllMaterialUseCase: DisplayAllMaterialUseCase
+   private getAddMaterialUseCase: DisplayAddMaterialDataUseCase
+   private saveMaterialUseCase: AddMaterialUseCase
+   private getEditMaterialUseCase: GetEditMaterialUseCase
+   private updateMaterialUseCase: UpdateMaterialUseCase
+   private deleteMaterialUseCase: DeleteMaterialUseCase
+   constructor(
+      displayAllMaterialUseCase: DisplayAllMaterialUseCase,
+      getAddMaterialUseCase: DisplayAddMaterialDataUseCase,
+      saveMaterialUseCase: AddMaterialUseCase,
+      getEditMaterialUseCase: GetEditMaterialUseCase,
+      updateMaterialUseCase: UpdateMaterialUseCase,
+      deleteMaterialUseCase: DeleteMaterialUseCase
+   ) {
+      this.displayAllMaterialUseCase = displayAllMaterialUseCase
+      this.getAddMaterialUseCase = getAddMaterialUseCase
+      this.saveMaterialUseCase = saveMaterialUseCase
+      this.getEditMaterialUseCase = getEditMaterialUseCase
+      this.updateMaterialUseCase = updateMaterialUseCase
+      this.deleteMaterialUseCase = deleteMaterialUseCase
    }
+
+   materialList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.displayAllMaterialUseCase.execute()
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   addMaterialList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.getAddMaterialUseCase.execute()
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   saveMaterial = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.saveMaterialUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   editMaterialList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.getEditMaterialUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   updateMaterial = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.updateMaterialUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   removeMaterial = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.deleteMaterialUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+
 }
 
-export const addMaterialList = async (req: Request, res: Response) => {
-   try {
-      const result = await getAddMaterial()
-      res.status(200).json(result)
-   } catch (error: any) {
-      console.log(error)
-      res.status(400).json(error.message)
-   }
-}
-
-export const saveMaterial = async (req: Request, res: Response) => {
-   try {
-      const result = await addMaterial(req.body)
-      res.status(201).json(result)
-   } catch (error: any) {
-      console.log(error)
-      res.status(400).json(error.message)
-   }
-}
 
 
-export const editMaterialList = async (req: Request, res: Response) => {
-   try {
-      const result = await getEditMaterial(req.body)
-      res.status(200).json(result)
-   } catch (error: any) {
-      console.log(error)
-      res.status(400).json(error.message)
-   }
-}
 
 
-export const updateMaterial = async (req: Request, res: Response) => {
-   try {
-      const result = await editMaterial(req.body)
-      res.status(200).json(result)
-   } catch (error: any) {
-      console.log(error)
-      res.status(400).json(error.message)
-   }
-}
 
-export const removeMaterial = async (req: Request, res: Response) => {
-   try {
-      const result = await deleteMaterial(req.body)
-      res.status(200).json(result)
-   } catch (error: any) {
-      console.error(error)
-      res.status(400).json(error.message)
-   }
-}

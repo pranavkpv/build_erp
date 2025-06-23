@@ -12,11 +12,7 @@ export interface addUnitInput {
    short_name: string
 }
 
-//output of add unit
-export interface addUnitOutpit{
-   success:boolean,
-   message:string
-}
+
 
 //input of edit unit
 
@@ -26,25 +22,16 @@ export interface editUnitInput {
    short_name: string
 }
 
-//edit unit output
-export interface editUnitOutput{
-   success:boolean,
-   message:string
-}
+
 
 //delete Unit input
 export interface deletUnitInput {
    _id: string
 }
-//delete Unit output
-export interface deleteUnitOutput{
+
+export interface outputUnit{
    success:boolean,
    message:string
 }
 
-//general error
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
-}
+

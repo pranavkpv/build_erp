@@ -1,13 +1,19 @@
-import { Request,Response } from "express";
-import { loginCheck } from "../../../application/useCases/loginAdmin";
+import { NextFunction, Request,Response } from "express";
+import { AdminLoginUseCase } from "../../../useCases/AdminLoginUseCase";
 
 
-export const adminLogin = async(req:Request,res:Response)=>{
-   try {
-      const result = await loginCheck(req.body)
-      res.status(200).json(result)
-   } catch (error:any) {
+export class adminController{
+   private adminLoginUsecase : AdminLoginUseCase
+   constructor(adminLoginUsecase : AdminLoginUseCase){
+      this.adminLoginUsecase = adminLoginUsecase
+   }
+   login = async(req:Request,res:Response,next:NextFunction):Promise<void>=>{
+     try {
+       const result = await this.adminLoginUsecase.execute(req.body)
+       res.status(200).json(result)
+     } catch (error) {
       console.log(error)
-      res.status(400).json({message:error.message})
+      next(error)
+     }
    }
 }

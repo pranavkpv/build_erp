@@ -1,0 +1,10 @@
+import { Sitemanager } from "../types/sitemanager";
+
+export interface ISitemanagerRepository{
+   findAllSitemanager():Promise<Sitemanager[] | []>;
+   findSitemanagerByEmail(email:string):Promise<Sitemanager | null >
+   saveSitemanager(username:string,email:string,password:string):Promise<void>
+   findSitemanagerInEdit(_id:string,email:string):Promise<Sitemanager | null>
+   updateSitemanager(_id:string,username:string,email:string,password:string):Promise<void>
+   deleteSitemanager(_id:string):Promise<void>
+}

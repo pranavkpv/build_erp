@@ -14,11 +14,7 @@ export interface addsitemanagerInput {
   password: string
 }
 
-//output of add sitemanager
-export interface addsitemanagerOutput{
-  success:boolean,
-  message:string
-}
+
 
 //input of editsiteamanager
 export interface editSitemanagerInput {
@@ -28,25 +24,15 @@ export interface editSitemanagerInput {
   password: string
 }
 
-//output of edit sitemanager
-export interface editSitemangerOutput{
-  success:boolean,
-  message:string
-}
+
 
 //input of delete sitemanager
 export interface deleteSitemanagerInput {
   _id: string
 }
 //output of delete sitemanager
-export interface deleteSitemenagerOutput{
+export interface OutPutSitemanager{
   success:boolean,
   message:string
 }
 
-//general error
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
-}

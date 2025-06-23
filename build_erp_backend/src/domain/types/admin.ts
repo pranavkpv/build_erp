@@ -17,9 +17,3 @@ export interface adminloginOutput{
    message:string
 }
 
-//general error
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
-}

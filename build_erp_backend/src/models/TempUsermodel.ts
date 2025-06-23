@@ -13,13 +13,13 @@ const TempUserSchema:Schema = new Schema({
       type:String
    },
    phone:{
-      type:String
+      type:Number
    },
    password:{
       type:String
    },
    otp:{
-      type:String
+      type:Number
    },
    otpCreatedAt:{
       type:Date,

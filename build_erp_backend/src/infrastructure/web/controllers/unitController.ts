@@ -1,45 +1,62 @@
-import { Request,Response } from "express"
-import { deleteUnit, saveUnit, unitList,updateUnit } from "../../../application/useCases/unit"
+import { NextFunction, Request, Response } from "express"
+import {  DisplayAllUnitUseCase } from "../../../useCases/DisplayAllUnitUseCase"
+import { SaveUnitUseCase } from "../../../useCases/SaveUnitUseCase"
+import { updateUnitUseCase } from "../../../useCases/updateUnitUseCase"
+import { deleteUnitUseCase } from "../../../useCases/DeleteUnitUseCase"
 
 
-export const getUnit = async(req:Request,res:Response)=>{
-   try {
-      const result = await unitList()
-      res.status(200).json(result)
-   } catch (error:any) {
-      console.log(error)
-      res.status(400).json({message:error.message})
+
+export class UnitController {
+   private displayUnitUseCase: DisplayAllUnitUseCase
+   private addUnitUseCase: SaveUnitUseCase
+   private editUnitUseCase: updateUnitUseCase
+   private deleteUnitUseCase: deleteUnitUseCase
+   constructor(
+      displayUnitUseCase: DisplayAllUnitUseCase,
+      addUnitUseCase: SaveUnitUseCase,
+      editUnitUseCase: updateUnitUseCase,
+      deleteUnitUseCase: deleteUnitUseCase
+   ) {
+      this.displayUnitUseCase = displayUnitUseCase
+      this.addUnitUseCase = addUnitUseCase
+      this.editUnitUseCase = editUnitUseCase
+      this.deleteUnitUseCase = deleteUnitUseCase
+   }
+   getUnit = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.displayUnitUseCase.execute()
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   addUnit = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.addUnitUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   editUnit = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.editUnitUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
+   }
+   removeUnit = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+         const result = await this.deleteUnitUseCase.execute(req.body)
+         res.status(200).json(result)
+      } catch (error) {
+         console.log(error)
+         next(error)
+      }
    }
 }
 
-
-export const addUnit = async(req:Request,res:Response)=>{
-   try {
-      const result = await saveUnit(req.body)
-      res.status(201).json(result)
-   } catch (error:any) {
-      console.log(error)
-      res.status(400).json({message:error.message})
-   }
-}
-
-
-export const editUnit = async(req:Request,res:Response)=>{
-   try {
-      const result = await updateUnit(req.body)
-      res.status(200).json(result)
-   } catch (error:any) {
-      console.log(error)
-      res.status(400).json({message:error.message})
-   }
-}
-
-export const removeUnit = async(req:Request,res:Response)=>{
-   try {
-      const result = await deleteUnit(req.body)
-       res.status(200).json(result)
-   } catch (error:any) {
-      console.log(error)
-      res.status(400).json({message:error.message})
-   }
-}

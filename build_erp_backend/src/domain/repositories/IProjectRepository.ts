@@ -1,0 +1,11 @@
+import { getProjectListData, Project } from "../types/project";
+
+export interface IprojectRepository{
+   findAllProjectWithUser():Promise<getProjectListData[] | []>
+   findProjectByName(project_name:string):Promise<Project | null>
+   saveProject( project_name:string,user_id:string,address:string,mobile_number:number,email:string,area:string,description:string,status:string):Promise<void>;
+   findProjectInEdit(_id:string,project_name:string):Promise<Project | null>
+   UpdateProjectById(_id:string,project_name:string,user_id:string,address:string,mobile_number:number,email:string,area:number,description:string):Promise<void>;
+   DeleteProjectById(_id:string):Promise<void>
+   changeProjectStatus(_id:string,status:string):Promise<void>
+}

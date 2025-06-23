@@ -4,6 +4,12 @@ import { User } from "../domain/types/user";
 
 export interface IUser extends User, Document {
    _id: string;
+   username:string,
+   email:string,
+   phone:number,
+   password:string,
+   profile_image:string
+
 }
 
 const userSchema: Schema = new Schema({
@@ -17,7 +23,7 @@ const userSchema: Schema = new Schema({
       unique: true
    },
    phone: {
-      type: String,
+      type: Number,
       required: true,
       unique: true
    },
@@ -31,5 +37,5 @@ const userSchema: Schema = new Schema({
 
 }, { timestamps: true })
 
-const UserModal = mongoose.model<IUser>('user', userSchema)
-export default UserModal
+const UserModel = mongoose.model<IUser>('user', userSchema)
+export default UserModel

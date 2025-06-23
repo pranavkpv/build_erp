@@ -12,11 +12,7 @@ export interface addcategoryInput {
    description: string
 }
 
-//output of add category
-export interface addcategoryOutput{
-   success:boolean,
-   message:string
-}
+
 
 //input of edit category
 export interface editCategoryInput {
@@ -25,11 +21,7 @@ export interface editCategoryInput {
    description: string
 }
 
-//output of edit category
-export interface editCategoryOutput{
-   success:boolean,
-   message:string
-}
+
 
 //input of delete category
 export interface deleteCategoryInput {
@@ -37,14 +29,8 @@ export interface deleteCategoryInput {
 }
 
 //ooutput of delete category
-export interface deleteCategoryOutput{
+export interface outputCategory{
    success:boolean,
    message:string
 }
 
-//general error
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
-}

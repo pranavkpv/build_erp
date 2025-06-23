@@ -1,4 +1,39 @@
+import { Brand } from "./brand"
+import { Category } from "./category"
+import { editProjectStockData, Project } from "./project"
+import { Unit } from "./unit"
+import { addProjectStockInput } from "./project"
+
 export interface Material {
+   _id: string,
+   material_name: string,
+   categoryDetails: {
+      _id: string,
+      category_name: string,
+      description: string,
+      createdAt: Date,
+      updatedAt: Date
+   }
+   brandDetails: {
+      _id: string,
+      brand_name: string,
+      createdAt: Date,
+      updatedAt: Date
+   }
+   unitDetails: {
+      _id: string,
+      unit_name: string,
+      short_name: string,
+      createdAt: Date,
+      updatedAt: Date
+   }
+   unit_rate: number,
+   stock: number,
+   createdAt: Date,
+   updatedAt: Date
+}
+
+export interface MaterialList {
    _id: string,
    material_name: string,
    category_id: string,
@@ -28,18 +63,13 @@ export interface addMaterialInput {
    unit_id: string,
    unit_rate: number,
    stock: number,
-   projectWiseStock: [{
-      project_id: string,
-      material_id: string,
-      stock: number
-   }]
+   projectWiseStock: addProjectStockInput[]
+
 }
 
-//output of add material
-export interface addMaterialOutput {
-   success: boolean,
-   message: string
-}
+
+
+
 
 //edit material data fetch
 export interface getEditMaterialData {
@@ -48,56 +78,53 @@ export interface getEditMaterialData {
 
 //output of data fetch in edit
 export interface outEditMaterialData {
-   material_name: string,
-   category_id: string,
-   brand_id: string,
-   unit_id: string,
-   unit_rate: number,
-   stock: number,
-   projectWiseStock: [{
-      project_id: string,
-      material_id: string,
-      stock: number
-   }]
+   categoryData: Category[],
+   brandData : Brand[],
+   unitData : Unit[] | null,
+   materialData: {
+      _id: string,
+      material_name: string,
+      category_id: string,
+      brand_id: string,
+      unit_id: string,
+      unit_rate: number,
+      stock: number,
+      createdAt: Date,
+      updatedAt: Date
+   } | null,
+   projectStockData:editProjectStockData[]
+
 }
 
 //input of edit material
 export interface editMaterialInput {
-   _id: string
+   _id:string,
    material_name: string,
    category_id: string,
    brand_id: string,
    unit_id: string,
    unit_rate: number,
    stock: number,
-   projectWiseStock: [{
-      _id: string,
-      project_id: string,
-      material_id: string,
-      stock: number
-   }]
+   projectWiseStock: editProjectStockData[]
+
 }
 
-//output of edit material
-export interface editmaterialOutput {
-   success: boolean,
-   message: string
-}
 
 //input of delete material
 export interface deleteMaterialInput {
    _id: string
 }
 
-//output of delete material
-export interface deleteMaterialOutput {
+
+export interface outputMaterial {
    success: boolean,
    message: string
 }
 
-//general error
-export interface generalError{
-   code:string,
-   message:string,
-   statusCode:number
+export interface getAddMaterialData {
+   categoryData: Category[],
+   brandData: Brand[],
+   unitData: Unit[] | null,
+   projectData: Project[]
 }
+
