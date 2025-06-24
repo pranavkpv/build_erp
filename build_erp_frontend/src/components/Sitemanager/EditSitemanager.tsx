@@ -62,8 +62,8 @@ function EditSitemanager({
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/sitemanager`, {
-        editId,
-        sitemanager,
+        _id:editId,
+        username:sitemanager,
         email,
         password,
       });

@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 type BrandProps = {
   enable: boolean;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onAdd: (brand: { _id: string; brand_name: string }) => void;
+  onAdd: () => void;
 };
 
 function AddBrand({ enable, setEnable, onAdd }: BrandProps) {
@@ -32,7 +32,7 @@ function AddBrand({ enable, setEnable, onAdd }: BrandProps) {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onAdd(response.data.data); // Pass the newly added brand data to the parent
+        onAdd()
         setEnable(false); // Close the modal
         setBrand(""); // Clear the input field after successful submission
       } else {

@@ -47,9 +47,9 @@ function LabourEdit({
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/labour`, {
-        labourId,
-        labourData, // This is the updated labour_type
-        wageData,   // This is the updated daily_wage
+        _id:labourId,
+        labour_type:labourData, 
+        daily_wage:wageData,  
       });
 
       if (response.data.success) {

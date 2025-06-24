@@ -2,11 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-type CategoryType = {
-  _id: string;
-  category_name: string;
-  description: string;
-};
+
 
 type CategoryProps = {
   editId: string;
@@ -14,7 +10,7 @@ type CategoryProps = {
   editCategory: string;
   editDescription: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: CategoryType) => void;
+  onUpdate: () => void;
 };
 
 function EditCategory({
@@ -51,18 +47,16 @@ function EditCategory({
     }
 
     try {
-      // The endpoint used here is `/admin/unit` but the component name is `EditCategory`.
-      // Please ensure this is the correct endpoint for updating categories.
-      const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/category`, { // Changed to /admin/category
-        editId,
-        category, // This will be the new category_name
+      const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/category`, { 
+        _id:editId,
+        category_name:category, 
         description,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onUpdate(response.data.data); // Pass the updated data back to the parent
-        setEnable(false); // Close the modal
+        onUpdate(); 
+        setEnable(false); 
       } else {
         toast.error(response.data.message);
       }

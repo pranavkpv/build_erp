@@ -41,12 +41,8 @@ function Category() {
     fetchData();
   }, []);
 
-  // Handler for updating a category after edit
-  const handleUpdateCategory = (updated: CategoryType) => {
-    setCategories((prev) =>
-      prev.map((item) => (item._id === updated._id ? updated : item))
-    );
-  };
+
+
 
   // Filter categories based on search input
   const filteredCategories = categories.filter((item) =>
@@ -75,7 +71,7 @@ function Category() {
         </div>
 
         {/* Add Category Modal (already styled) */}
-        <AddCategory enable={enableAdd} setEnable={setEnableAdd} onAdd={(newCat) => setCategories((prev) => [...prev, newCat])} />
+        <AddCategory enable={enableAdd} setEnable={setEnableAdd} onAdd={fetchData} />
 
         {/* Categories Table */}
         <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-700/50">
@@ -137,7 +133,7 @@ function Category() {
           editId={editId}
           editCategory={editCategory}
           editDescription={editDescription}
-          onUpdate={handleUpdateCategory}
+          onUpdate={fetchData}
         />
 
         {/* Delete Category Modal (already styled) */}

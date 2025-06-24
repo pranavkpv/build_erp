@@ -39,12 +39,7 @@ function Brand() {
     fetchData();
   }, []);
 
-  // Handler for updating a brand after edit
-  const handleUpdateBrand = (updated: BrandType) => {
-    setBrandList((prev) =>
-      prev.map((item) => (item._id === updated._id ? updated : item))
-    );
-  };
+  
 
   // Filter brands based on search input
   const filteredBrands = brandList.filter((item) =>
@@ -76,7 +71,7 @@ function Brand() {
         <AddBrand
           enable={enableAdd}
           setEnable={setEnableAdd}
-          onAdd={(newBrand) => setBrandList((prev) => [...prev, newBrand])}
+          onAdd={fetchData}
         />
 
         {/* Brands Table */}
@@ -135,7 +130,7 @@ function Brand() {
           setEnable={setEnableEdit}
           editId={editId}
           editBrandname={editBrand}
-          onUpdate={handleUpdateBrand}
+          onUpdate={fetchData}
         />
 
         {/* Delete Brand Modal (already styled) */}

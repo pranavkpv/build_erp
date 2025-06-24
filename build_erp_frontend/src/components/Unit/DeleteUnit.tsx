@@ -12,7 +12,7 @@ function DeleteUnit({ enable, deleteId, setEnable, onDeleteSuccess }: Unitprops)
   const deleteUnit = async () => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
-        data: { _id: deleteId }, // Fixed payload key to match UnitType
+        data: { _id: deleteId }, 
       });
 
       if (response.data.success) {

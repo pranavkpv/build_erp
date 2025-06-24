@@ -46,7 +46,7 @@ function AddSitemanager({ addEnable, setAddEnable, onAddSuccess }: AddSitemanage
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/sitemanager`, {
-        sitemanager,
+        username:sitemanager,
         email,
         password,
       });

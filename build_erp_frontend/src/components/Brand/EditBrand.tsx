@@ -2,17 +2,14 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-type BrandType = {
-  _id: string;
-  brand_name: string;
-};
+
 
 type EditBrandProps = { // Renamed Unitprops to EditBrandProps for clarity
   editId: string;
   enable: boolean;
   editBrandname: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: BrandType) => void;
+  onUpdate: () => void;
 };
 
 function EditBrand({
@@ -47,16 +44,13 @@ function EditBrand({
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/brand`, {
-        editId,
+        _id:editId,
         brand_name,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onUpdate({ // Callback to update the parent component's state
-          _id: editId,
-          brand_name: brand_name,
-        });
+        onUpdate();
         setEnable(false); // Close the modal
       } else {
         toast.error(response.data.message);

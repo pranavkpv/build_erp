@@ -2,11 +2,7 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 
-type UnitType = {
-  _id: string;
-  unit_name: string;
-  short_name: string;
-};
+
 
 type Unitprops = {
   editId: string;
@@ -14,7 +10,7 @@ type Unitprops = {
   editUnit: string;
   editShortname: string;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onUpdate: (updated: UnitType) => void;
+  onUpdate: () => void;
 };
 
 function EditUnit({
@@ -58,18 +54,14 @@ function EditUnit({
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
-        editId,
-        unit,
+        _id:editId,
+        unit_name:unit,
         short_name,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onUpdate({
-          _id: editId,
-          unit_name: unit,
-          short_name,
-        });
+        onUpdate();
         setEnable(false);
       } else {
         toast.error(response.data.message);

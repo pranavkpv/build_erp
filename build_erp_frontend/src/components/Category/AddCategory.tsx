@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 type CategoryProps = {
   enable: boolean;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onAdd: (category: { _id: string; category_name: string; description: string }) => void;
+  onAdd: () => void;
 };
 
 function AddCategory({ enable, setEnable, onAdd }: CategoryProps) {
@@ -28,15 +28,15 @@ function AddCategory({ enable, setEnable, onAdd }: CategoryProps) {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/category`, {
-        category, // This will be sent as category_name in the backend
+        category_name:category, 
         description,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onAdd(response.data.data); // Pass the newly added category data to parent
-        setEnable(false); // Close the modal
-        setCategory(""); // Clear form fields after successful submission
+        onAdd(); 
+        setEnable(false); 
+        setCategory(""); 
         setDescription("");
       } else {
         toast.error(response.data.message);

@@ -16,7 +16,9 @@ function Material() {
   const fetchMaterials = async () => {
     try {
       const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/material`);
+      console.log(response.data)
       setMaterialData(response.data);
+  
     } catch (error) {
       console.error("Failed to fetch materials:", error);
       toast.error("An error occurred while fetching materials.");

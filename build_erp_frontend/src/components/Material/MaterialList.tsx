@@ -28,7 +28,7 @@ type MaterialListProps = {
   refreshData:()=>void
 };
 
-function MaterialList({ setEnable, enable, materialData, setDeleteEnable, setDeleteId,refreshData }: MaterialListProps) {
+function MaterialList({ setEnable, enable, materialData, setDeleteEnable, setDeleteId }: MaterialListProps) {
   const [search, setSearch] = useState("");
 
   const filteredMaterials = materialData.filter((item) =>

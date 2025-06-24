@@ -36,19 +36,19 @@ function LabourAdd({ addEnable, setAddEnable, onsuccessAdd }: addLabourData) {
     }
 
     if (hasError) {
-      return; // Stop if there are validation errors
+      return; 
     }
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/labour`, {
-        labour,
-        wage,
+        labour_type:labour,
+        daily_wage:wage,
       });
       if (response.data.success) {
         toast.success(response.data.message);
-        setAddEnable(false); // Close modal on success
-        onsuccessAdd(); // Refresh list in parent component
-        setLabour(""); // Clear form fields
+        setAddEnable(false); 
+        onsuccessAdd();
+        setLabour(""); 
         setWage(0);
       } else {
         toast.error(response.data.message);

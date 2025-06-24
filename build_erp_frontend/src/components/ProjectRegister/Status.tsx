@@ -13,7 +13,7 @@ function ChangeStatus({ project_id, status, enable, setEnable, onChangeSuccess }
   const statusChanged = async () => {
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/status`, {
-        project_id,
+        _id:project_id,
         status,
       });
 

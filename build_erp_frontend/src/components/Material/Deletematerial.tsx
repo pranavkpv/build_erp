@@ -12,7 +12,7 @@ function DeleteMaterial({ enable, setEnable, deleteId, onDeleteSuccess }: Delete
   const deleteMatData = async () => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/material`, {
-        data: { deleteId: deleteId },
+        data: { _id: deleteId },
       });
       if (response.data.success) {
         toast.success(response.data.message);

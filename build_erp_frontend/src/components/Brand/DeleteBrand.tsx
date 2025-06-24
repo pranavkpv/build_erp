@@ -13,13 +13,13 @@ function DeleteBrand({ enable, deleteId, setEnable, onDeleteSuccess }: BrandProp
   const deleteBrand = async () => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_BASE_URL}/admin/brand`, {
-        data: { id: deleteId }, // Send deleteId in the request body
+        data: { _id: deleteId }, 
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setEnable(false); // Close the modal
-        onDeleteSuccess(); // Trigger data refresh in the parent component
+        setEnable(false); 
+        onDeleteSuccess(); 
       } else {
         toast.error(response.data.message);
       }

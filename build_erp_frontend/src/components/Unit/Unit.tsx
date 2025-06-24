@@ -64,7 +64,7 @@ function Unit() {
         <AddUnit
           enable={enableAdd}
           setEnable={setEnableAdd}
-          onAdd={(newUnit) => setUnitList((prev) => [...prev, newUnit])}
+          onAdd={fetchData}
         />
 
         <div className="overflow-x-auto rounded-xl border border-gray-700/50">
@@ -131,11 +131,7 @@ function Unit() {
           editId={editId}
           editUnit={editUnit}
           editShortname={editShortUnit}
-          onUpdate={(updatedUnit) => {
-            setUnitList((prev) =>
-              prev.map((u) => (u._id === updatedUnit._id ? updatedUnit : u))
-            );
-          }}
+          onUpdate={fetchData}
         />
 
         <DeleteUnit

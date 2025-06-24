@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 type Unitprops = {
   enable: boolean;
   setEnable: React.Dispatch<React.SetStateAction<boolean>>;
-  onAdd: (unit: { _id: string; unit_name: string; short_name: string }) => void;
+  onAdd: () => void;
 };
 
 function AddUnit({ enable, setEnable, onAdd }: Unitprops) {
@@ -37,13 +37,13 @@ function AddUnit({ enable, setEnable, onAdd }: Unitprops) {
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/unit`, {
-        unit,
+        unit_name:unit,
         short_name,
       });
 
       if (response.data.success) {
         toast.success(response.data.message);
-        onAdd(response.data.data);
+        onAdd()
         setEnable(false);
       } else {
         toast.error(response.data.message);

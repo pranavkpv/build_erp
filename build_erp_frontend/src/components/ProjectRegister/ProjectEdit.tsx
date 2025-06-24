@@ -135,7 +135,7 @@ function EditProject({
 
     try {
       const response = await axios.put(`${import.meta.env.VITE_BASE_URL}/admin/project`, {
-        editId: editProjectId,
+        _id: editProjectId,
         project_name,
         user_id,
         address,
