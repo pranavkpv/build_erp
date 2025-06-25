@@ -1,6 +1,8 @@
+import { Tokens } from "./auth";
+
 //core User Entity
 export interface User {
-  _id?: string; 
+  _id: string; 
   username: string;
   email: string;
   phone: number;
@@ -59,7 +61,8 @@ export interface loginInput{
 //login output
 export interface loginOutput{
    success:boolean,
-   message:string
+   message:string,
+   tokens?: Tokens
 }
 
 

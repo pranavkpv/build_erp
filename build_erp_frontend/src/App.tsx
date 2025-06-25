@@ -14,19 +14,21 @@ import Project from "./components/ProjectRegister/Projectlist"
 import Material from "./components/Material/Material"
 import Labourlist from "./components/Labour/Labourlist"
 import SitemanagerList from "./components/Sitemanager/SitemanagerList"
+import ListSiteToProject from "./components/AddSiteToproject/ListSiteToproject"
+import Backloginprotected from "./routes/protectedRoute/user/backloginprotected"
+
+
 
 
 
 function App() {
-
-
   return (
     <>
       <BrowserRouter>
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route path="/otp" element={<Otp />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Backloginprotected><Login /></Backloginprotected>} />
           <Route path="/" element={<Home />} />
           <Route path="/admin/login" element={<Adminlogin />} />
           <Route path="/admin" element={<Adminlayout />} >
@@ -38,6 +40,7 @@ function App() {
             <Route path = "material" element ={<Material />} />
             <Route path = "Labour" element = {<Labourlist />} />
             <Route path ="Sitemanager" element = {< SitemanagerList />} />
+            <Route path = "addToSite" element = {<ListSiteToProject />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,3 +1,4 @@
+import { projectWithSitemanager } from "../types/addSite";
 import { getProjectListData, Project } from "../types/project";
 
 export interface IprojectRepository{
@@ -8,4 +9,7 @@ export interface IprojectRepository{
    UpdateProjectById(_id:string,project_name:string,user_id:string,address:string,mobile_number:number,email:string,area:number,description:string):Promise<void>;
    DeleteProjectById(_id:string):Promise<void>
    changeProjectStatus(_id:string,status:string):Promise<void>
+   addSitemanagerToProject(_id:string,siteManager_id:string):Promise<void>
+   findProjectWithSitemanager():Promise<projectWithSitemanager[] | []>;
+   removeSitemanagerInProject(_id:string,sitemanager_id:string):Promise<void>
 }

@@ -14,7 +14,10 @@ export class VerifyOTPUseCases {
       const { otp, email } = input
       const ExistUser = await this.UserRepository.findTempUserByEmailAndOTP(email, otp)
       if (!ExistUser) {
-         throw new AppError(false, "entered OTP is wrong", 400)
+         return {
+            success:false,
+            message:"entered OTP is wrong"
+         }
       }
       if (ExistUser.otpCreatedAt == undefined || ExistUser.otpCreatedAt == null) {
          throw new AppError(false, "OTP creation timestamp is missing", 500)
@@ -22,7 +25,10 @@ export class VerifyOTPUseCases {
       const exitOtp = new Date(ExistUser.otpCreatedAt).getTime();
       const now = Date.now();
       if ((now - exitOtp) > 30 * 1000) {
-         throw new AppError(false, "Your OTP has timed out. Kindly resend and try again.", 404)
+         return {
+            success:false,
+            message:"Your OTP has timed out. Kindly resend and try again."
+         }
       }
 
 

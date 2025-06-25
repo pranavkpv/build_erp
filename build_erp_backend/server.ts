@@ -1,19 +1,7 @@
 import express from 'express';
 import cors from 'cors';
-import adminRouter from './src/infrastructure/web/routes/adminRouter'
+import cookieParser from 'cookie-parser';
 
-//models import 
-import UserModel from './src/models/Usermodel';
-import AdminModel from './src/models/AdminModel';
-import BrandModel from './src/models/BrandModel';
-import CategoryModel from './src/models/CategoryModel';
-import LabourModel from './src/models/LabourModel';
-import MaterialModel from './src/models/MaterialModel';
-import ProjectModel from './src/models/ProjectModel';
-import ProjectStockModel from './src/models/ProjectStockModel';
-import SitemanagerModel from './src/models/SitemanagerModel';
-import TempUsermodel from './src/models/TempUsermodel';
-import UnitModel from './src/models/UnitModel';
 
 
 //mongoose repository
@@ -90,6 +78,12 @@ import createAuthRoute from './src/infrastructure/web/routes/userRouter';
 import { connectDB } from './src/config/db';
 import { BcryptHasher } from './src/infrastructure/secuirity/BcryptHasher';
 import { deleteUnitUseCase } from './src/useCases/DeleteUnitUseCase';
+import { AddSiteController } from './src/infrastructure/web/controllers/addSiteController';
+import { AddSiteToProjectUseCase } from './src/useCases/AddSiteToProjectUseCase';
+import { ListSiteToProject } from './src/useCases/ListSiteToProjectUseCase';
+import { DeleteSiteToProjectUseCase } from './src/useCases/DeleteSitemanagerInProjectUseCase';
+import { RefreshTokenUseCase } from './src/useCases/RefreshTokenUseCase';
+import { JwtServiceImpl } from './src/services/JwtService';
 
 
 require("dotenv").config();
@@ -100,21 +94,25 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded())
+app.use(cookieParser());
 
 async function compositeRoot() {
    try {
       await connectDB();
       const UserRepository = new UsermongooseRepository()
       const hasher = new BcryptHasher()
+      const JwtService = new JwtServiceImpl()
       const signupUserUseCase = new SignupUserUseCase(UserRepository)
       const verifyOTPUseCase = new VerifyOTPUseCases(UserRepository,hasher)
       const resendOTPUseCase = new ResendOTPUseCase(UserRepository)
-      const userLoginUseCase = new UserLoginUseCase(UserRepository,hasher)
+      const refreshTokenUseCase = new RefreshTokenUseCase(UserRepository,JwtService)
+      const userLoginUseCase = new UserLoginUseCase(UserRepository,hasher,JwtService)
       const authController = new AuthController(
          signupUserUseCase,
          verifyOTPUseCase,
          resendOTPUseCase,
-         userLoginUseCase
+         userLoginUseCase,
+         refreshTokenUseCase
       )
       app.use("/",createAuthRoute(authController))
       //
@@ -161,6 +159,9 @@ async function compositeRoot() {
       const addSitemanagerUseCase = new SaveSitemanagerUseCase(sitemanagerRepository)
       const editSitemanagerUsecase = new UpdateSitemanagerUseCase(sitemanagerRepository)
       const deleteSitemanagerUseCase = new DeleteSitemanagerUseCase(sitemanagerRepository)
+      const addSiteToProjectUseCase = new AddSiteToProjectUseCase(projectRepository)
+      const listSiteToProjectUseCase = new ListSiteToProject(projectRepository)
+      const deleteSitetoprojectuseCase = new DeleteSiteToProjectUseCase(projectRepository)
 
 
       const newAdminController = new adminController(adminLoginUsecase)
@@ -171,10 +172,12 @@ async function compositeRoot() {
       const newProjectController = new ProjectController(displayProjectUseCase, displayAddProjectUseCase, addProjectUseCase, editProjectUseCase, removeProjectUseCase, changeStatusUseCase)
       const newLabourController = new LabourController(displayAllLabourUseCase, addLabourUseCase, updateLabourUseCase, deleteLabourUseCase)
       const newSitemanagerController = new SitemanagerController(displayAllSitemanagerUseCase, addSitemanagerUseCase, editSitemanagerUsecase, deleteSitemanagerUseCase)
+      const newAddSiteController = new AddSiteController(addSiteToProjectUseCase, listSiteToProjectUseCase, deleteSitetoprojectuseCase)
 
       app.use("/admin",createAdminRoute(newAdminController,
          newCategoryController,newUnitController,newBrandController,newMaterialController,
-         newProjectController,newLabourController,newSitemanagerController
+         newProjectController,newLabourController,newSitemanagerController,newAddSiteController
+
       ))
 
    } catch (error) {

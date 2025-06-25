@@ -140,7 +140,7 @@ function ProjectAdd({ enableAdd, setEnableAdd, onAddSuccess }: EditType) {
   if (!enableAdd) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6"> {/* Added padding for smaller screens */}
+    <div className=" inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6"> {/* Added padding for smaller screens */}
       <form
         onSubmit={addFormSubmit}
         // max-w-4xl for larger form, added max-h-[95vh] and overflow-y-auto for scrollability

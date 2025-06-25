@@ -16,10 +16,9 @@ export class UsermongooseRepository implements IUserRepository {
       const savedUser = await newUser.save()
       return savedUser.toObject() as User
    }
-   async otpSave(user: Omit<User, "_id" | "profile_image" | "updatedAt" | "createdAt">): Promise<User> {
+   async otpSave(user: Omit<User, "_id" | "profile_image" | "updatedAt" | "createdAt">): Promise<void> {
       const newTempUser = new TempUsermodel(user)
-      const savedUser = await newTempUser.save()
-      return savedUser.toObject() as User
+      await newTempUser.save()
    }
    async findTempUserByEmailAndOTP(email: string, otp: string): Promise<User | null> {
       const ExistUser = await TempUsermodel.findOne({ email, otp })
@@ -32,8 +31,8 @@ export class UsermongooseRepository implements IUserRepository {
    async deleteTempUserByEmail(email: string): Promise<void> {
       await TempUsermodel.deleteOne({ email })
    }
-   async findTempUserByEmailAndUpdateOTP(email: string, otp: number, otpCreatedAt: Date): Promise<User | null> {
-      const ResendTemp = await TempUsermodel.findOneAndUpdate({ email: email }, { $set: { otp: otp, otpCreatedAt: Date.now() } })
+   async findTempUserByEmailAndUpdateOTP(email: string, otp: number,otpCreatedAt:Date): Promise<User | null> {
+      const ResendTemp = await TempUsermodel.findOneAndUpdate({ email: email }, { $set: { otp, otpCreatedAt } })
       return ResendTemp?.toObject() as User
    }
    async findAllUser(): Promise<User[] | []> {

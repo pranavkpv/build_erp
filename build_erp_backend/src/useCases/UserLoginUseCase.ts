@@ -1,15 +1,20 @@
 import { IHasher } from "../domain/repositories/IHasher";
 import { IUserRepository } from "../domain/repositories/IUserRepository";
 import { loginInput, loginOutput } from "../domain/types/user";
+import { JwtServiceImpl } from "../services/JwtService";
+
+
 
 
 
 export class UserLoginUseCase {
    private UserRepository: IUserRepository
    private Hasher: IHasher
-   constructor(UserRepository: IUserRepository, Hasher: IHasher) {
+   private jwtService : JwtServiceImpl
+   constructor(UserRepository: IUserRepository, Hasher: IHasher,jwtService : JwtServiceImpl) {
       this.UserRepository = UserRepository
       this.Hasher = Hasher
+      this.jwtService = jwtService
    }
    async execute(input: loginInput): Promise<loginOutput> {
       const { email, password } = input
@@ -28,9 +33,12 @@ export class UserLoginUseCase {
          }
       }
 
+      const tokens = this.jwtService.generateTokens(existUser._id,existUser.email)
+
       return {
          success: true,
-         message: "Login successfully"
+         message: "Login successfully",
+         tokens
       }
 
    }

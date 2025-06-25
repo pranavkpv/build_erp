@@ -56,8 +56,8 @@ function Header() {
                         <User className="w-5 h-5 text-white" />
                      </div>
                      <div className="hidden md:block text-left">
-                        <p className="text-white font-medium text-sm">John Smith</p>
-                        <p className="text-slate-400 text-xs">Site Manager</p>
+                        <p className="text-white font-medium text-sm">Admin</p>
+                  
                      </div>
                      <ChevronDown className="w-4 h-4 text-slate-400" />
                   </button>

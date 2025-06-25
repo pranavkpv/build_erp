@@ -13,15 +13,22 @@ export class SignupUserUseCase {
       this.UserRepository = UserRepository
    }
    async execute(input: userSignupInput): Promise<userSignupOutput> {
+      console.log(input)
       const { username, email, phone, password } = input
 
       const existUser = await  this.UserRepository.findUserByEmail(email)
       const existPhone = await this.UserRepository.findUserByPhone(phone)
-      if (!existUser) {
-         throw new AppError(false, "User already Exist", 409)
+      if (existUser) {
+          return {
+            success:false,
+            message:"User Already Exist"
+         }
       }
-      if (!existPhone) {
-         throw new AppError(false, "User already Exist", 409)
+      if (existPhone) {
+         return {
+            success:false,
+            message:"User Already Exist"
+         }
       }
 
       const otp = Math.floor(100000 + Math.random() * 900000)

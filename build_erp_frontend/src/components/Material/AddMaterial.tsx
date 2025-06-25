@@ -166,7 +166,7 @@ function AddMaterial({ setEnable, enable, refreshData }: AddMaterialProps) {
   if (!enable) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6">
+    <div className=" inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6">
       <div className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-2xl p-6 sm:p-8 w-full max-w-4xl max-h-[95vh] overflow-y-auto border border-gray-700/50">
         <h1 className="text-2xl font-bold text-center text-gray-100 mb-6 border-b border-gray-700 pb-4">
           Add New Material

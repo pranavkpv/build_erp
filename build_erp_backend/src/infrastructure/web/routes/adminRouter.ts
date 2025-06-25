@@ -8,6 +8,7 @@ import { MaterialController } from "../controllers/materialController";
 import { ProjectController } from "../controllers/projectController";
 import {  SitemanagerController } from "../controllers/sitemanagerController";
 import { UnitController } from "../controllers/unitController";
+import { AddSiteController } from "../controllers/addSiteController";
 
 
 
@@ -15,7 +16,7 @@ const createAdminRoute = (adminController: adminController,
    categoryController: CategoryController, unitController: UnitController,
    brandController: brandController, materialController: MaterialController,
    projectController: ProjectController, labourController: LabourController,
-   sitemanagerController : SitemanagerController
+   sitemanagerController : SitemanagerController,addSiteController:AddSiteController
 
 ): Router => {
    const router = Router()
@@ -60,6 +61,9 @@ const createAdminRoute = (adminController: adminController,
    router.put("/sitemanager",sitemanagerController.editSitemanager)
    router.delete("/sitemanager",sitemanagerController.deleteSitemanager)
 
+   router.get("/addToSite",addSiteController.listSite)
+   router.post("/addToSite",addSiteController.saveData)
+   router.delete("/addToSite",addSiteController.deleteSite)
 
    return router
 }
