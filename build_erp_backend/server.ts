@@ -84,6 +84,7 @@ import { ListSiteToProject } from './src/useCases/ListSiteToProjectUseCase';
 import { DeleteSiteToProjectUseCase } from './src/useCases/DeleteSitemanagerInProjectUseCase';
 import { RefreshTokenUseCase } from './src/useCases/RefreshTokenUseCase';
 import { JwtServiceImpl } from './src/services/JwtService';
+import { AdminJwtServiceImpl } from './src/services/adminJwtService';
 
 
 require("dotenv").config();
@@ -91,7 +92,11 @@ require("dotenv").config();
 
 const PORT = process.env.PORT || 3000
 const app = express()
-app.use(cors())
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true              
+}));
+
 app.use(express.json())
 app.use(express.urlencoded())
 app.use(cookieParser());
@@ -102,6 +107,7 @@ async function compositeRoot() {
       const UserRepository = new UsermongooseRepository()
       const hasher = new BcryptHasher()
       const JwtService = new JwtServiceImpl()
+      const AdminJwtService = new AdminJwtServiceImpl()
       const signupUserUseCase = new SignupUserUseCase(UserRepository)
       const verifyOTPUseCase = new VerifyOTPUseCases(UserRepository,hasher)
       const resendOTPUseCase = new ResendOTPUseCase(UserRepository)
@@ -126,7 +132,7 @@ async function compositeRoot() {
      const labourRepository = new LabourmongooseRepository()
      const sitemanagerRepository = new SitemanagetmongooseRepository()
 
-      const adminLoginUsecase = new AdminLoginUseCase(adminRepository)
+      const adminLoginUsecase = new AdminLoginUseCase(adminRepository,AdminJwtService)
       const displayAllCategoryUseCase = new DisplayAllCategoryUseCase(categoryRepository)
       const addCategoryUseCase = new SaveCategoryUseCase(categoryRepository)
       const editcategoryUseCase = new UpdateCategoryUseCase(categoryRepository)

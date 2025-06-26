@@ -48,16 +48,16 @@ export class AuthController {
    login = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
          const result = await this.userLoginUseCase.execute(req.body)
-         if (result.success && result.tokens) {
+         if (result.success && result.tokens?.refreshToken) {
             res.cookie('refreshToken', result.tokens.refreshToken, {
-               httpOnly: true,
-               secure: process.env.NODE_ENV === 'production',
-               sameSite: 'strict',
-               maxAge: 1 * 24 * 60 * 60 * 1000,
+               httpOnly: false,
+               secure: false,
+               sameSite: 'lax',
+               maxAge: 24 * 60 * 60 * 1000,
             });
             res.status(200).json(result)
          } else {
-            res.status(401).json(result);
+            res.status(200).json(result);
          }
 
       } catch (error) {

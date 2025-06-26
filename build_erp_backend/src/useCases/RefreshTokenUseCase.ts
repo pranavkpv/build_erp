@@ -16,7 +16,7 @@ export class RefreshTokenUseCase {
     const payload = this.JwtService.verifyRefreshToken(refreshToken);
     if (!payload) throw new Error('Invalid refresh token');
 
-    const user = await this.UserRepository.findUserByEmail(payload._id);
+    const user = await this.UserRepository.findUserById(payload._id)
     if (!user) throw new Error('User not found');
 
     return this.JwtService.generateTokens( user._id, user.email );

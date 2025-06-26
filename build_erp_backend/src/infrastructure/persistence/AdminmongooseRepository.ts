@@ -7,4 +7,8 @@ export class AdminmongooseRepository implements IAdminRepository{
           const admin = await AdminModel.findOne({username,password})
           return admin ? (admin as Admin) : null
       }
+      async findAdminById(_id: string): Promise<Admin | null> {
+          const adminData = await AdminModel.findById(_id)
+          return adminData ? adminData : null
+      }
 }

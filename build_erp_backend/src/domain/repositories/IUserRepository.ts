@@ -13,5 +13,6 @@ export interface IUserRepository{
    //resendOTP
    findTempUserByEmailAndUpdateOTP(email:string,otp:number,otpCreatedAt:Date):Promise<User | null>;
    findAllUser():Promise<User[] | []>;
+   findUserById(_id:string):Promise<User | null>;
 
 }

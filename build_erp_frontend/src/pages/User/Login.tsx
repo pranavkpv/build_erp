@@ -41,8 +41,10 @@ function Login() {
     }
 
     try {
-      const response = await axios.post(`${ import.meta.env.VITE_BASE_URL }/login`, { email, password });
-      console.log(response.data)
+      const response = await axios.post(`${ import.meta.env.VITE_BASE_URL }/login`, { email, password }, {
+        withCredentials: true
+      });
+
       if (response.data.success) {
         toast.success(response.data.message);
         setTimeout(() => {

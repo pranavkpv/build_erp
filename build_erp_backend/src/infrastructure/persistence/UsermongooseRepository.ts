@@ -39,4 +39,8 @@ export class UsermongooseRepository implements IUserRepository {
       const userData = await UserModel.find();
       return userData ? userData : []
    }
+   async findUserById(_id: string): Promise<User | null> {
+       const userData = await UserModel.findById(_id)
+       return userData ? userData : null
+   }
 }

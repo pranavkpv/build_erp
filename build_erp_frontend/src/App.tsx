@@ -16,6 +16,7 @@ import Labourlist from "./components/Labour/Labourlist"
 import SitemanagerList from "./components/Sitemanager/SitemanagerList"
 import ListSiteToProject from "./components/AddSiteToproject/ListSiteToproject"
 import Backloginprotected from "./routes/protectedRoute/user/backloginprotected"
+import AdminBackloginprotected from "./routes/protectedRoute/admin/backloginprotected"
 
 
 
@@ -30,7 +31,7 @@ function App() {
           <Route path="/otp" element={<Otp />} />
           <Route path="/login" element={<Backloginprotected><Login /></Backloginprotected>} />
           <Route path="/" element={<Home />} />
-          <Route path="/admin/login" element={<Adminlogin />} />
+          <Route path="/admin/login" element={<AdminBackloginprotected><Adminlogin /></AdminBackloginprotected>} />
           <Route path="/admin" element={<Adminlayout />} >
             <Route path="dashboard" element={<Dashboard />} />
             <Route path="project" element={<Project />} />

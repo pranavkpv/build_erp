@@ -8,14 +8,14 @@ function Adminlogin() {
   const passRef = useRef<HTMLParagraphElement>(null);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const loginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    let hasError = false; 
+    let hasError = false;
 
-   
+
     if (username.trim() === "") {
       if (userRef.current) {
         userRef.current.innerText = "Username is required.";
@@ -27,7 +27,7 @@ function Adminlogin() {
       }
     }
 
-   
+
     if (password.trim() === "") {
       if (passRef.current) {
         passRef.current.innerText = "Password is required.";
@@ -39,24 +39,27 @@ function Adminlogin() {
       }
     }
 
-   
+
     if (hasError) {
       return;
     }
 
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/admin/login`,
+        `${ import.meta.env.VITE_BASE_URL }/admin/login`,
         {
           username,
           password,
-        }
+        }, {
+        withCredentials: true
+      }
       );
+
 
       if (response.data.success) {
         toast.success(response.data.message);
-       
         navigate("/admin/dashboard");
+        localStorage.setItem('accessToken', response.data.token.accessToken);
       } else {
         toast.error(response.data.message);
       }
@@ -85,7 +88,7 @@ function Adminlogin() {
             id="username"
             placeholder="Enter your username"
             onChange={(e) => setUsername(e.target.value)}
-            value={username} 
+            value={username}
             className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
           <p ref={userRef} className="text-red-400 text-sm mt-1"></p>
@@ -96,11 +99,11 @@ function Adminlogin() {
             Password
           </label>
           <input
-            type="text" 
+            type="text"
             id="password"
             placeholder="Enter your password"
             onChange={(e) => setPassword(e.target.value)}
-            value={password} 
+            value={password}
             className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
           />
           <p ref={passRef} className="text-red-400 text-sm mt-1"></p>

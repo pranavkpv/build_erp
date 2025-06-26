@@ -1,11 +1,14 @@
 
 import {  adminloginInput, adminloginOutput } from "../domain/types/admin"
 import { IAdminRepository } from "../domain/repositories/IAdminRepository"
+import { AdminJwtServiceImpl } from "../services/adminJwtService"
 
 export class AdminLoginUseCase{
    private adminRepository : IAdminRepository
-   constructor(adminRepository : IAdminRepository){
+   private jwtservice : AdminJwtServiceImpl
+   constructor(adminRepository : IAdminRepository,jwtservice : AdminJwtServiceImpl){
       this.adminRepository = adminRepository
+      this.jwtservice = jwtservice
    }
    async execute(input:adminloginInput):Promise<adminloginOutput>{
       const {username,password} = input
@@ -13,6 +16,7 @@ export class AdminLoginUseCase{
       if(!existAdmin){
           return {success:false , message:"The username or password you entered is invalid."}
       }
-      return {success:true,message:"login successfully"}  
+      const token = this.jwtservice.generateTokens(existAdmin._id,existAdmin.username)    
+      return {success:true,message:"login successfully",token}  
    }
 }

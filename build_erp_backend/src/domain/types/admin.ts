@@ -1,3 +1,5 @@
+import { Tokens } from "./auth"
+
 export interface Admin {
    _id: string
    username: string,
@@ -14,6 +16,7 @@ export interface adminloginInput {
 //output of admin login
 export interface adminloginOutput{
    success:boolean,
-   message:string
+   message:string,
+   token ?:Tokens
 }
 
