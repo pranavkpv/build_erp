@@ -11,7 +11,6 @@ export interface Sitemanager {
 export interface addsitemanagerInput {
   username: string,
   email: string,
-  password: string
 }
 
 
@@ -21,7 +20,7 @@ export interface editSitemanagerInput {
   _id: string
   username: string,
   email: string,
-  password: string
+
 }
 
 

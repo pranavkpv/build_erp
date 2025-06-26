@@ -11,10 +11,9 @@ type AddSitemanagerProps = {
 function AddSitemanager({ addEnable, setAddEnable, onAddSuccess }: AddSitemanagerProps) {
   const [sitemanager, setSitemanager] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const sitemanagerRef = useRef<HTMLParagraphElement>(null);
   const emailRef = useRef<HTMLParagraphElement>(null);
-  const passwordRef = useRef<HTMLParagraphElement>(null);
+  
 
   const sitemanagerAdd = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,20 +34,13 @@ function AddSitemanager({ addEnable, setAddEnable, onAddSuccess }: AddSitemanage
       if (emailRef.current) emailRef.current.innerText = "";
     }
 
-    if (password.trim() === "") {
-      if (passwordRef.current) passwordRef.current.innerText = "Password is required";
-      hasError = true;
-    } else {
-      if (passwordRef.current) passwordRef.current.innerText = "";
-    }
 
     if (hasError) return;
 
     try {
       const response = await axios.post(`${import.meta.env.VITE_BASE_URL}/admin/sitemanager`, {
         username:sitemanager,
-        email,
-        password,
+        email
       });
       if (response.data.success) {
         toast.success(response.data.message);
@@ -90,17 +82,6 @@ function AddSitemanager({ addEnable, setAddEnable, onAddSuccess }: AddSitemanage
               className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
             />
             <p ref={emailRef} className="text-sm text-red-400 mt-1.5"></p>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-200 mb-1.5">Password</label>
-            <input
-              type="text"
-              placeholder="Enter password"
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-            />
-            <p ref={passwordRef} className="text-sm text-red-400 mt-1.5"></p>
           </div>
 
           <div className="flex justify-end gap-4 pt-4">

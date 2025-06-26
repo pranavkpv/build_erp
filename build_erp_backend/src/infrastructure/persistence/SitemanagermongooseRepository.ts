@@ -30,14 +30,21 @@ export class SitemanagetmongooseRepository implements ISitemanagerRepository {
       const existData = await SitemanagerModel.findOne({ _id: { $ne: _id }, email: {$regex:new RegExp(`^${email}$`,"i")} })
       return existData ? existData : null
    }
-   async updateSitemanager(_id: string, username: string, email: string, password: string): Promise<void> {
+   async updateSitemanager(_id: string, username: string, email: string): Promise<void> {
       await SitemanagerModel.findByIdAndUpdate(_id, {
          username,
-         email,
-         password
+         email
       })
    }
    async deleteSitemanager(_id: string): Promise<void> {
       await SitemanagerModel.findByIdAndDelete(_id)
+   }
+   async generatePassword(): Promise<string> {
+      let result = ""
+      let char = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()><?"
+      for(let i=0;i<10;i++){
+         result+=char[Math.floor(Math.random() * char.length)]
+      }
+      return result
    }
 }

@@ -8,13 +8,12 @@ export class UpdateSitemanagerUseCase {
       this.SitemanagerRepository = SitemanagerRepository
    }
    async execute(input: editSitemanagerInput): Promise<OutPutSitemanager> {
-      const { _id, username, email, password } = input
+      const { _id, username, email } = input
       const existData = await this.SitemanagerRepository.findSitemanagerInEdit(_id, email)
       if (existData) {
          return { success: false, message: "sitemanager already exist" }
       }
-      const hashpassword = await hashedPassword(password)
-      await this.SitemanagerRepository.updateSitemanager(_id, username, email, hashpassword)
+      await this.SitemanagerRepository.updateSitemanager(_id, username, email)
       return { success: true, message: "Sitemanager updated successfully" }
    }
 }
