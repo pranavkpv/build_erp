@@ -16,6 +16,8 @@ function Category() {
   const [enableAdd, setEnableAdd] = useState(false);
   const [categories, setCategories] = useState<CategoryType[]>([]);
   const [searchCategory, setSearchCat] = useState<string>("");
+  const [page,setPage] = useState(0)
+  const [totalPage, setTotal] = useState(0)
 
   const [enableEdit, setEnableEdit] = useState(false);
   const [editId, setEditId] = useState("");
@@ -25,11 +27,12 @@ function Category() {
   const [deleteId, setDeleteId] = useState("");
   const [enableDelete, setEnableDelete] = useState(false);
 
-  // Function to fetch all categories
+
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/category`);
-      setCategories(response.data);
+      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/category`,{ params: { page, search:searchCategory } });
+       setTotal(Math.ceil(response.data.totalPage))
+      setCategories(response.data.getCategoryData);
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Failed to load categories.");
@@ -39,15 +42,12 @@ function Category() {
   // Fetch data on component mount
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page,searchCategory]);
 
 
 
 
-  // Filter categories based on search input
-  const filteredCategories = categories.filter((item) =>
-    item.category_name.toLowerCase().includes(searchCategory.toLowerCase())
-  );
+ 
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen">
@@ -85,16 +85,16 @@ function Category() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {filteredCategories.length === 0 ? (
+              {categories.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="text-center py-6 text-gray-400 font-medium">
                     No categories found.
                   </td>
                 </tr>
               ) : (
-                filteredCategories.map((cat, index) => (
+                categories.map((cat, index) => (
                   <tr key={cat._id} className="hover:bg-gray-700/50 transition-colors duration-150">
-                    <td className="px-6 py-4 text-gray-300">{index + 1}</td>
+                    <td className="px-6 py-4 text-gray-300">{(index + 1)+(page*5)}</td>
                     <td className="px-6 py-4 text-gray-300">{cat.category_name}</td>
                     <td className="px-6 py-4 text-gray-300">{cat.description}</td>
                     <td className="px-6 py-4 flex justify-center items-center gap-2">
@@ -124,9 +124,24 @@ function Category() {
               )}
             </tbody>
           </table>
+           <div className="flex justify-center gap-2 mt-6">
+            {Array.from({ length: totalPage }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i 
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Edit Category Modal (already styled) */}
+  
         <EditCategory
           enable={enableEdit}
           setEnable={setEnableEdit}
@@ -136,12 +151,12 @@ function Category() {
           onUpdate={fetchData}
         />
 
-        {/* Delete Category Modal (already styled) */}
+      
         <DeleteCategory
           enable={enableDelete}
           deleteId={deleteId}
           setEnable={setEnableDelete}
-          onDeleteSuccess={fetchData} // Re-fetch data to reflect deletion
+          onDeleteSuccess={fetchData} 
         />
       </div>
     </div>

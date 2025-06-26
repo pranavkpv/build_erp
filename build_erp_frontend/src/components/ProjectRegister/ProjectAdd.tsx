@@ -104,12 +104,6 @@ function ProjectAdd({ enableAdd, setEnableAdd, onAddSuccess }: EditType) {
       areaRef.current.innerText = "";
     }
 
-    if (description.trim() === "") {
-      if (descriptionRef.current) descriptionRef.current.innerText = "Description is required.";
-      hasError = true;
-    } else if (descriptionRef.current) {
-      descriptionRef.current.innerText = "";
-    }
 
     if (hasError) return;
 
@@ -126,6 +120,14 @@ function ProjectAdd({ enableAdd, setEnableAdd, onAddSuccess }: EditType) {
 
       if (response.data.success) {
         toast.success(response.data.message);
+        setUserList([])
+        setSelectedUserId("")
+        setProjectName("")
+        setAddress("")
+        setMobile("")
+        setEmail("")
+        setArea(0)
+        setDescription("")
         setEnableAdd(false);
         onAddSuccess();
       } else {
@@ -140,7 +142,7 @@ function ProjectAdd({ enableAdd, setEnableAdd, onAddSuccess }: EditType) {
   if (!enableAdd) return null;
 
   return (
-    <div className=" inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6"> {/* Added padding for smaller screens */}
+    <div className="fixed inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6"> {/* Added padding for smaller screens */}
       <form
         onSubmit={addFormSubmit}
         // max-w-4xl for larger form, added max-h-[95vh] and overflow-y-auto for scrollability

@@ -1,7 +1,7 @@
 import { Sitemanager } from "../types/sitemanager";
 
 export interface ISitemanagerRepository{
-   findAllSitemanager():Promise<Sitemanager[] | []>;
+   findAllSitemanager(page:number,search:string):Promise<{getSiteData:any[];totalPage:number }>;
    findSitemanagerByEmail(email:string):Promise<Sitemanager | null >
    saveSitemanager(username:string,email:string,password:string):Promise<void>
    findSitemanagerInEdit(_id:string,email:string):Promise<Sitemanager | null>

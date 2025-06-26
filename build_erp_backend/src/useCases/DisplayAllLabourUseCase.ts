@@ -1,16 +1,19 @@
 
 
 import { ILabourRepository } from "../domain/repositories/ILabourRepository"
-import {  Labour } from "../domain/types/labour"
+
 
 export class DisplayAllLabourUseCase {
    private labourRepository: ILabourRepository
    constructor(labourRepository: ILabourRepository) {
       this.labourRepository = labourRepository
    }
-   async execute(): Promise<Labour[] | []> {
-      const result = await this.labourRepository.findAllLabour()
-      return result ? (result as Labour[]) : []
+   async execute(page:number,search:string): Promise<{getLabourData:any[];totalPage:number }> {
+      const {getLabourData,totalPage} = await this.labourRepository.findAllLabour(page,search)
+       return {
+         getLabourData,
+         totalPage
+      }
    }
 }
 

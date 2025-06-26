@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import ProjectAdd from "./ProjectAdd";
-import DeleteProject from "./ProjectDelete"; 
-import EditProject from "./ProjectEdit";    
-import ChangeStatus from "./Status";         
+import DeleteProject from "./ProjectDelete";
+import EditProject from "./ProjectEdit";
+import ChangeStatus from "./Status";
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 
@@ -28,6 +28,8 @@ function Project() {
   const [projectList, setProjectList] = useState<ProjectType[]>([]);
   const [search, setSearch] = useState("");
   const [addEnable, setAddEnable] = useState(false);
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotal] = useState(0)
 
   // delete
   const [deleteEnable, setDeleteEnable] = useState(false);
@@ -52,8 +54,11 @@ function Project() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/project`);
-      setProjectList(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/project`, { params: { page, search } });
+
+      setProjectList(response.data.getProjectListData);
+      setTotal(Math.ceil(response.data.totalPage))
+
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while fetching projects.");
@@ -62,7 +67,7 @@ function Project() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page,search]);
 
   return (
     <div className="p-6 sm:p-8 min-h-screen bg-gray-900">
@@ -108,15 +113,9 @@ function Project() {
                   </td>
                 </tr>
               ) : (
-                projectList
-                  .filter(
-                    (item) =>
-                      item.project_name.toLowerCase().includes(search.toLowerCase()) ||
-                      item.userDetails[0]?.username.toLowerCase().includes(search.toLowerCase())
-                  )
-                  .map((element, index) => (
+                projectList.map((element, index) => (
                     <tr key={element._id} className="hover:bg-gray-700/50 transition-colors duration-150">
-                      <td className="px-6 py-4 font-medium text-gray-200">{index + 1}</td>
+                      <td className="px-6 py-4 font-medium text-gray-200">{(index + 1)+(page*5)}</td>
                       <td className="px-6 py-4 text-gray-200">{element.project_name}</td>
                       <td className="px-6 py-4 text-gray-200">{element.userDetails[0]?.username}</td>
                       <td className="px-6 py-4">
@@ -124,8 +123,8 @@ function Project() {
                           <p className="text-gray-200 capitalize">{element.status}</p>
                         ) : (
                           <select
-                            aria-label={`Select status for ${element.project_name}`}
-                            id={`status-${element._id}`}
+                            aria-label={`Select status for ${ element.project_name }`}
+                            id={`status-${ element._id }`}
                             defaultValue={element.status}
                             className="w-full px-3 py-2 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 text-gray-100 text-sm font-medium"
                             onChange={(e) => {
@@ -167,7 +166,7 @@ function Project() {
                             setEditProjectId(element._id);
                           }}
                           className="text-yellow-400 hover:text-yellow-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                          aria-label={`Edit project ${element.project_name}`}
+                          aria-label={`Edit project ${ element.project_name }`}
                         >
                           <PencilIcon className="h-5 w-5" />
                         </button>
@@ -177,7 +176,7 @@ function Project() {
                             setDeleteId(element._id);
                           }}
                           className="text-red-400 hover:text-red-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                          aria-label={`Delete project ${element.project_name}`}
+                          aria-label={`Delete project ${ element.project_name }`}
                         >
                           <TrashIcon className="h-5 w-5" />
                         </button>
@@ -187,9 +186,26 @@ function Project() {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({ length: totalPage }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i 
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
+
+
           <ProjectAdd enableAdd={addEnable} setEnableAdd={setAddEnable} onAddSuccess={fetchData} />
         </div>
-        
+
 
         <ChangeStatus
           project_id={changeProjectId}
@@ -222,6 +238,8 @@ function Project() {
         />
       </div>
     </div>
+
+
   );
 }
 

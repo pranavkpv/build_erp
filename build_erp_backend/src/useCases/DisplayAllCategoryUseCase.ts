@@ -8,9 +8,12 @@ export class DisplayAllCategoryUseCase {
    constructor(categoryRepository: ICategoryRepository) {
       this.categoryRepository = categoryRepository
    }
-   async execute(): Promise<Category[] | null> {
-      const categoryData = await this.categoryRepository.findAllCategory()
-      return categoryData ? (categoryData as Category[]) : null
+   async execute(page:number,search:string): Promise<{getCategoryData:any[];totalPage:number }> {
+      const {getCategoryData,totalPage} = await this.categoryRepository.findAllListCategory(page, search)
+      return {
+         getCategoryData ,
+         totalPage
+      }
    }
 }
 

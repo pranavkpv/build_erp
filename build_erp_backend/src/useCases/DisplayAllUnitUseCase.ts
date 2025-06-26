@@ -8,9 +8,12 @@ export class DisplayAllUnitUseCase {
    constructor(UnitRepository: IUnitRepository) {
       this.UnitRepository = UnitRepository
    }
-   async execute(): Promise<Unit[] | []> {
-      const existUnit = await this.UnitRepository.findUnit()
-      return existUnit ? (existUnit as Unit[]) : []
+   async execute(page:number,search:string): Promise<{getUnitData:any[];totalPage:number }> {
+      const {getUnitData,totalPage} = await this.UnitRepository.findAllListUnit(page, search)
+      return {
+          getUnitData,
+         totalPage
+      }
    }
 }
 

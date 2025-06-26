@@ -13,21 +13,23 @@ type BrandType = {
 
 function Brand() {
   const [enableAdd, setEnableAdd] = useState(false);
-  const [brandList, setBrandList] = useState<BrandType[]>([]); // Renamed for consistency
+  const [brandList, setBrandList] = useState<BrandType[]>([]);
   const [searchBrand, setSearchBrand] = useState<string>("");
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotal] = useState(0)
 
   const [enableEdit, setEnableEdit] = useState(false);
   const [editId, setEditId] = useState("");
-  const [editBrand, setEditBrand] = useState(""); // Renamed for consistency
-
+  const [editBrand, setEditBrand] = useState("");
   const [deleteId, setDeleteId] = useState("");
   const [enableDelete, setEnableDelete] = useState(false);
 
-  // Function to fetch all brands
+
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/brand`);
-      setBrandList(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/brand`, { params: { page, search: searchBrand } });
+      setBrandList(response.data.getBrandData);
+      setTotal(Math.ceil(response.data.totalPage))
     } catch (error) {
       console.error("Error fetching brands:", error);
       toast.error("Failed to load brands.");
@@ -37,14 +39,11 @@ function Brand() {
   // Fetch data on component mount
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searchBrand, page]);
 
-  
 
-  // Filter brands based on search input
-  const filteredBrands = brandList.filter((item) =>
-    item.brand_name.toLowerCase().includes(searchBrand.toLowerCase())
-  );
+
+
 
   return (
     <div className="p-6 bg-gray-900 min-h-screen">
@@ -58,7 +57,7 @@ function Brand() {
             onChange={(e) => setSearchBrand(e.target.value)}
             value={searchBrand}
           />
-          {/* Add Brand Button */}
+  
           <button
             className="bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-5 py-2.5 rounded-lg shadow-md hover:shadow-xl transition-all duration-200 font-semibold flex items-center gap-2"
             onClick={() => setEnableAdd(true)}
@@ -67,14 +66,14 @@ function Brand() {
           </button>
         </div>
 
-        {/* Add Brand Modal (already styled) */}
+      
         <AddBrand
           enable={enableAdd}
           setEnable={setEnableAdd}
           onAdd={fetchData}
         />
 
-        {/* Brands Table */}
+
         <div className="overflow-x-auto rounded-xl shadow-lg border border-gray-700/50">
           <table className="min-w-full text-sm text-left bg-gray-800/50">
             <thead className="bg-gray-800/70 text-gray-200 uppercase text-xs font-semibold tracking-wider">
@@ -85,14 +84,14 @@ function Brand() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {filteredBrands.length === 0 ? (
+              {brandList.length === 0 ? (
                 <tr>
                   <td colSpan={3} className="text-center py-6 text-gray-400 font-medium">
                     No brands found.
                   </td>
                 </tr>
               ) : (
-                filteredBrands.map((brand, index) => (
+                brandList.map((brand, index) => (
                   <tr key={brand._id} className="hover:bg-gray-700/50 transition-colors duration-150">
                     <td className="px-6 py-4 text-gray-300">{index + 1}</td>
                     <td className="px-6 py-4 text-gray-300">{brand.brand_name}</td>
@@ -122,9 +121,24 @@ function Brand() {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({ length: totalPage }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Edit Brand Modal (already styled) */}
+       
         <EditBrand
           enable={enableEdit}
           setEnable={setEnableEdit}
@@ -133,12 +147,12 @@ function Brand() {
           onUpdate={fetchData}
         />
 
-        {/* Delete Brand Modal (already styled) */}
+       
         <DeleteBrand
           enable={enableDelete}
           deleteId={deleteId}
           setEnable={setEnableDelete}
-          onDeleteSuccess={fetchData} // Re-fetch data to reflect deletion
+          onDeleteSuccess={fetchData} 
         />
       </div>
     </div>

@@ -16,6 +16,9 @@ function Unit() {
   const [enableAdd, setEnableAdd] = useState(false);
   const [unitList, setUnitList] = useState<UnitType[]>([]);
   const [searchUnit, setSearchUnit] = useState<string>("");
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotal] = useState(0)
+
   const [enableEdit, setEnableEdit] = useState(false);
   const [editId, setEditId] = useState("");
   const [editUnit, setEditUnit] = useState("");
@@ -25,8 +28,9 @@ function Unit() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/unit`);
-      setUnitList(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/unit`, { params: { page, search: searchUnit } });
+      setTotal(Math.ceil(response.data.totalPage))
+      setUnitList(response.data.getUnitData);
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while fetching units.");
@@ -35,7 +39,7 @@ function Unit() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page,searchUnit]);
 
   return (
     <div className="p-6 sm:p-8 min-h-screen bg-gray-900">
@@ -85,44 +89,55 @@ function Unit() {
                   </td>
                 </tr>
               ) : (
-                unitList
-                  .filter((item) =>
-                    item.unit_name.toLowerCase().includes(searchUnit.toLowerCase())
-                  )
-                  .map((unit, index) => (
-                    <tr key={unit._id} className="hover:bg-gray-700/50 transition-colors duration-150">
-                      <td className="px-6 py-4 font-medium text-gray-200">{index + 1}</td>
-                      <td className="px-6 py-4 text-gray-200">{unit.unit_name}</td>
-                      <td className="px-6 py-4 text-gray-200">{unit.short_name}</td>
-                      <td className="px-6 py-4 text-center space-x-3">
-                        <button
-                          onClick={() => {
-                            setEnableEdit(true);
-                            setEditId(unit._id);
-                            setEditUnit(unit.unit_name);
-                            setEditShortUnit(unit.short_name);
-                          }}
-                          className="text-yellow-400 hover:text-yellow-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                          aria-label={`Edit unit ${unit.unit_name}`}
-                        >
-                          <PencilIcon className="h-5 w-5" />
-                        </button>
-                        <button
-                          onClick={() => {
-                            setDeleteId(unit._id);
-                            setEnableDelete(true);
-                          }}
-                          className="text-red-400 hover:text-red-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                          aria-label={`Delete unit ${unit.unit_name}`}
-                        >
-                          <TrashIcon className="h-5 w-5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))
+                unitList.map((unit, index) => (
+                  <tr key={unit._id} className="hover:bg-gray-700/50 transition-colors duration-150">
+                    <td className="px-6 py-4 font-medium text-gray-200">{(index + 1) + (page * 5)}</td>
+                    <td className="px-6 py-4 text-gray-200">{unit.unit_name}</td>
+                    <td className="px-6 py-4 text-gray-200">{unit.short_name}</td>
+                    <td className="px-6 py-4 text-center space-x-3">
+                      <button
+                        onClick={() => {
+                          setEnableEdit(true);
+                          setEditId(unit._id);
+                          setEditUnit(unit.unit_name);
+                          setEditShortUnit(unit.short_name);
+                        }}
+                        className="text-yellow-400 hover:text-yellow-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
+                        aria-label={`Edit unit ${ unit.unit_name }`}
+                      >
+                        <PencilIcon className="h-5 w-5" />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setDeleteId(unit._id);
+                          setEnableDelete(true);
+                        }}
+                        className="text-red-400 hover:text-red-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
+                        aria-label={`Delete unit ${ unit.unit_name }`}
+                      >
+                        <TrashIcon className="h-5 w-5" />
+                      </button>
+                    </td>
+                  </tr>
+                ))
               )}
             </tbody>
           </table>
+           <div className="flex justify-center gap-2 mt-6">
+              {Array.from({ length: totalPage }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setPage(i)}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i
+                      ? 'bg-teal-600 text-white shadow-md'
+                      : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
         </div>
 
         <EditUnit

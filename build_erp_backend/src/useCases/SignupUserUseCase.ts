@@ -13,7 +13,7 @@ export class SignupUserUseCase {
       this.UserRepository = UserRepository
    }
    async execute(input: userSignupInput): Promise<userSignupOutput> {
-      console.log(input)
+   
       const { username, email, phone, password } = input
 
       const existUser = await  this.UserRepository.findUserByEmail(email)

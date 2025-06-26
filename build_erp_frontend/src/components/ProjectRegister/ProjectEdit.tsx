@@ -161,113 +161,145 @@ function EditProject({
   if (!editEnable) return null;
 
   return (
-    <div className="fixed inset-0 bg-gray-900/80 z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-gray-900/80 flex items-center justify-center z-50 p-4 sm:p-6">
       <form
-        className="bg-gray-800/90 backdrop-blur-sm rounded-xl shadow-2xl w-full max-w-lg p-6 sm:p-8 border border-gray-700/50 space-y-5"
         onSubmit={editFormSubmit}
+        className="bg-gray-800/90 backdrop-blur-md rounded-xl shadow-2xl w-full max-w-4xl p-6 border border-gray-700/50 max-h-[95vh] overflow-y-auto"
       >
-        <h1 className="text-xl font-semibold text-center text-gray-100 mb-6">Edit Project</h1>
+        <h1 className="text-2xl font-bold text-center text-gray-100 mb-6 border-b border-gray-700 pb-4">
+          Edit Project
+        </h1>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Project Name</label>
-          <input
-            type="text"
-            placeholder="Enter project name"
-            value={project_name}
-            onChange={(e) => setProjectName(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-          />
-          <p ref={projectRef} className="text-sm text-red-400 mt-1.5"></p>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Project Name */}
+          <div>
+            <label htmlFor="projectName" className="block text-sm font-medium text-gray-200 mb-1">
+              Project Name
+            </label>
+            <input
+              id="projectName"
+              type="text"
+              value={project_name}
+              onChange={(e) => setProjectName(e.target.value)}
+              placeholder="Enter project name"
+              className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
+            />
+            <p ref={projectRef} className="text-sm text-red-400 mt-1.5"></p>
+          </div>
+
+          {/* Client */}
+          <div>
+            <label htmlFor="clientSelect" className="block text-sm font-medium text-gray-200 mb-1">
+              Client
+            </label>
+            <select
+              id="clientSelect"
+              value={user_id}
+              onChange={(e) => setUserId(e.target.value)}
+              className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
+            >
+              <option value="">Select a client</option>
+              {userList.map((user) => (
+                <option key={user._id} value={user._id}>
+                  {user.username}
+                </option>
+              ))}
+            </select>
+            <p ref={userRef} className="text-sm text-red-400 mt-1.5"></p>
+          </div>
+
+          {/* Address */}
+          <div>
+            <label htmlFor="address" className="block text-sm font-medium text-gray-200 mb-1">
+              Address
+            </label>
+            <input
+              id="address"
+              type="text"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              placeholder="Enter address"
+              className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
+            />
+            <p ref={addressRef} className="text-sm text-red-400 mt-1.5"></p>
+          </div>
+
+          {/* Mobile Number */}
+          <div>
+            <label htmlFor="mobileNumber" className="block text-sm font-medium text-gray-200 mb-1">
+              Mobile Number
+            </label>
+            <input
+              id="mobileNumber"
+              type="text"
+              value={mobile_number}
+              onChange={(e) => setMobile(e.target.value)}
+              placeholder="Enter mobile number"
+              className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
+            />
+            <p ref={mobileRef} className="text-sm text-red-400 mt-1.5"></p>
+          </div>
+
+          {/* Email */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-200 mb-1">
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter email"
+              className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
+            />
+            <p ref={emailRef} className="text-sm text-red-400 mt-1.5"></p>
+          </div>
+
+          {/* Area */}
+          <div>
+            <label htmlFor="area" className="block text-sm font-medium text-gray-200 mb-1">
+              Area (sqft)
+            </label>
+            <input
+              id="area"
+              type="number"
+              value={area}
+              onChange={(e) => setArea(Number(e.target.value))}
+              placeholder="Enter area"
+              className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm"
+            />
+            <p ref={areaRef} className="text-sm text-red-400 mt-1.5"></p>
+          </div>
         </div>
 
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Client</label>
-          <select
-            aria-label="Select a client"
-            value={user_id}
-            onChange={(e) => setUserId(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-          >
-            <option value="">Select a client</option>
-            {userList.map((user) => (
-              <option key={user._id} value={user._id}>
-                {user.username}
-              </option>
-            ))}
-          </select>
-          <p ref={userRef} className="text-sm text-red-400 mt-1.5"></p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Address</label>
-          <input
-            type="text"
-            placeholder="Enter address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-          />
-          <p ref={addressRef} className="text-sm text-red-400 mt-1.5"></p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Mobile Number</label>
-          <input
-            type="text"
-            placeholder="Enter mobile number"
-            value={mobile_number}
-            onChange={(e) => setMobile(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-          />
-          <p ref={mobileRef} className="text-sm text-red-400 mt-1.5"></p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Email</label>
-          <input
-            type="email"
-            placeholder="Enter email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-          />
-          <p ref={emailRef} className="text-sm text-red-400 mt-1.5"></p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Area (sqft)</label>
-          <input
-            type="number"
-            placeholder="Enter area in square feet"
-            value={area}
-            onChange={(e) => setArea(Number(e.target.value))}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
-          />
-          <p ref={areaRef} className="text-sm text-red-400 mt-1.5"></p>
-        </div>
-
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-200 mb-1.5">Description</label>
+        {/* Description (full width) */}
+        <div className="mt-6">
+          <label htmlFor="description" className="block text-sm font-medium text-gray-200 mb-1">
+            Description
+          </label>
           <textarea
-            placeholder="Enter project description"
+            id="description"
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium min-h-[100px]"
+            placeholder="Enter project description"
+            className="w-full px-4 py-2.5 bg-gray-700/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent transition-colors duration-200 text-gray-100 placeholder-gray-400 text-sm min-h-[100px]"
           />
           <p ref={descriptionRef} className="text-sm text-red-400 mt-1.5"></p>
         </div>
 
-        <div className="flex justify-end gap-4 pt-4">
+        {/* Buttons */}
+        <div className="flex justify-end gap-4 pt-6">
           <button
             type="button"
-            className="bg-gray-600/90 hover:bg-gray-700 text-gray-100 px-4 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
             onClick={() => setEnableEdit(false)}
+            className="bg-gray-600 hover:bg-gray-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-colors duration-200"
           >
             Cancel
           </button>
           <button
             type="submit"
-            className="bg-teal-500/90 hover:bg-teal-600 text-white px-4 py-2.5 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 text-sm font-medium"
+            className="bg-teal-600 hover:bg-teal-700 text-white px-5 py-2.5 rounded-md text-sm font-medium transition-colors duration-200"
           >
             Save
           </button>

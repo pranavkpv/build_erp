@@ -8,7 +8,7 @@ export class BrandmongooseRepository implements IBrandRepository {
       return brandData ? (brandData as Brand[]) : []
    }
    async findBrandByName(brand_name: string): Promise<Brand | null> {
-      const existBrand = await BrandModel.findOne({ brand_name })
+      const existBrand = await BrandModel.findOne({ brand_name:{$regex:new RegExp(`^${brand_name}$`,"i")} })
       return existBrand ? (existBrand as Brand) : null
    }
    async saveBrand(brand_name: string): Promise<void> {
@@ -18,7 +18,7 @@ export class BrandmongooseRepository implements IBrandRepository {
       await newBrand.save()
    }
    async findBrandInEdit(_id: string, brand_name: string): Promise<Brand | null> {
-      const existBrand = await BrandModel.findOne({ _id: { $ne: _id }, brand_name })
+      const existBrand = await BrandModel.findOne({ _id: { $ne: _id }, brand_name:{$regex:new RegExp(`^${brand_name}$`,"i")} })
       return existBrand ? (existBrand as Brand) : null
    }
    async updateBrandById(_id: string, brand_name: string): Promise<void> {
@@ -26,5 +26,15 @@ export class BrandmongooseRepository implements IBrandRepository {
    }
    async deleteBrandById(_id: string): Promise<void> {
       await BrandModel.findByIdAndDelete(_id)
+   }
+   async findAllListBrand(page: number, search: string): Promise<{ getBrandData: any[]; totalPage: number; }> {
+      const skip = (page) * 5
+      const searchRegex = new RegExp(search, "i");
+      const brandList = await BrandModel.find({ brand_name: { $regex: searchRegex } }).skip(skip).limit(5)
+      const totalPage = await BrandModel.countDocuments() / 5
+      return {
+         getBrandData: brandList,
+         totalPage
+      }
    }
 }

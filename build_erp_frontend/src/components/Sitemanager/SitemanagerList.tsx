@@ -15,6 +15,9 @@ type SiteData = {
 
 function SitemanagerList() {
   const [sitedata, setSiteData] = useState<SiteData[]>([]);
+  const [searchSite, setSearchSite] = useState("")
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotal] = useState(0)
 
   // Add
   const [addEnable, setAddEnable] = useState(false);
@@ -31,8 +34,9 @@ function SitemanagerList() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/sitemanager`);
-      setSiteData(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/sitemanager`,{ params: { page, search: searchSite } });
+      setTotal(Math.ceil(response.data.totalPage))
+      setSiteData(response.data.getSiteData);
     } catch (error) {
       console.error("Failed to fetch site managers", error);
     }
@@ -40,7 +44,7 @@ function SitemanagerList() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page, searchSite]);
 
   return (
     <div className="p-6 sm:p-8 min-h-screen bg-gray-900">
@@ -56,6 +60,7 @@ function SitemanagerList() {
               placeholder="Search site manager..."
               className="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 placeholder:text-gray-400 text-gray-100 text-sm font-medium"
               aria-label="Search site manager"
+              onChange={(e) => setSearchSite(e.target.value)}
             />
           </div>
           <button
@@ -88,7 +93,7 @@ function SitemanagerList() {
               ) : (
                 sitedata.map((element, index) => (
                   <tr key={element._id} className="hover:bg-gray-700/50 transition-colors duration-150">
-                    <td className="px-6 py-4 font-medium text-gray-200">{index + 1}</td>
+                    <td className="px-6 py-4 font-medium text-gray-200">{(index + 1) + (page * 5)}</td>
                     <td className="px-6 py-4 text-gray-200">{element.username}</td>
                     <td className="px-6 py-4 text-gray-200">{element.email}</td>
                     <td className="px-6 py-4 space-x-3">
@@ -100,9 +105,9 @@ function SitemanagerList() {
                           setEmail(element.email);
                         }}
                         className="text-yellow-400 hover:text-yellow-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                        aria-label={`Edit site manager ${element.username}`}
+                        aria-label={`Edit site manager ${ element.username }`}
                       >
-         
+
                         <PencilIcon className="h-5 w-5" />
                       </button>
                       <button
@@ -111,7 +116,7 @@ function SitemanagerList() {
                           setDeleteId(element._id);
                         }}
                         className="text-red-400 hover:text-red-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                        aria-label={`Delete site manager ${element.username}`}
+                        aria-label={`Delete site manager ${ element.username }`}
                       >
                         <TrashIcon className="h-5 w-5" />
                       </button>
@@ -121,6 +126,21 @@ function SitemanagerList() {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({ length: totalPage }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

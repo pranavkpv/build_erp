@@ -7,8 +7,11 @@ export class DisplayAllProjectUseCase {
    constructor(projectRepository: IprojectRepository) {
       this.projectRepository = projectRepository
    }
-   async execute(): Promise<getProjectListData[] | []> {
-      const projectData = await this.projectRepository.findAllProjectWithUser()
-      return projectData ? projectData : []
+   async execute(page:number,search:string): Promise<{getProjectListData:any[];totalPage:number }> {
+       const { getProjectListData, totalPage } = await this.projectRepository.findAllProjectWithUser(page, search);
+      return {
+         getProjectListData,
+         totalPage
+      };
    }
 }

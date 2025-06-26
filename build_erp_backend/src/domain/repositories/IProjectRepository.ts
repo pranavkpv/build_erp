@@ -2,7 +2,7 @@ import { projectWithSitemanager } from "../types/addSite";
 import { getProjectListData, Project } from "../types/project";
 
 export interface IprojectRepository{
-   findAllProjectWithUser():Promise<getProjectListData[] | []>
+   findAllProjectWithUser(page:number,search:string):Promise<{getProjectListData:any[];totalPage:number }>
    findProjectByName(project_name:string):Promise<Project | null>
    saveProject( project_name:string,user_id:string,address:string,mobile_number:number,email:string,area:string,description:string,status:string):Promise<void>;
    findProjectInEdit(_id:string,project_name:string):Promise<Project | null>

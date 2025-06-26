@@ -1,9 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import LabourAdd from "./LabourAdd"; // Assuming this is already styled
-import LabourEdit from "./LabourEdit"; // Assuming this is already styled
-import DeleteLabour from "./LabourDelete"; // Assuming this is already styled
-import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline"; // Importing Heroicons
+import LabourAdd from "./LabourAdd";
+import LabourEdit from "./LabourEdit";
+import DeleteLabour from "./LabourDelete";
+import { PlusIcon, PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 type labourData = {
   _id: string;
@@ -13,6 +13,9 @@ type labourData = {
 
 function Labourlist() {
   const [labour, setLabour] = useState<labourData[]>([]);
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotal] = useState(0)
+  const [search, setSearch] = useState("");
 
   // Add
   const [addEnable, setAddEnable] = useState(false);
@@ -27,21 +30,22 @@ function Labourlist() {
   const [deleteId, setDeleteId] = useState("");
   const [deleteEnable, setdeleteEnable] = useState(false);
 
-  const [search, setSearch] = useState("");
+
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/labour`);
-      setLabour(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/labour`, { params: { page, search: search } });
+      setLabour(response.data.getLabourData);
+      setTotal(Math.ceil(response.data.totalPage))
     } catch (error) {
       console.error("Error fetching labour data:", error);
-      // Optionally, show a toast error
+
     }
   };
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page, search]);
 
   // Filtered labour data based on search input
   const filteredLabour = labour.filter((item) =>
@@ -120,6 +124,21 @@ function Labourlist() {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({ length: totalPage }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

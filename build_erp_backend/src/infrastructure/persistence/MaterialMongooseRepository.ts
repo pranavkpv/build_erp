@@ -11,7 +11,9 @@ import ProjectModel from "../../models/ProjectModel";
 import UnitModel from "../../models/UnitModel";
 
 export class MaterialmongooseRepository implements IMaterialRepository {
-   async findAllMaterial(): Promise<Material[] | []> {
+   async findAllMaterial(page: number, search: string): Promise<{ getMaterialData: any[]; totalPage: number }> {
+      const skip = (page) * 5
+      const searchRegex = new RegExp(search, "i");
       const MaterialData = await MaterialModel.aggregate([
          {
             $addFields: {
@@ -43,18 +45,29 @@ export class MaterialmongooseRepository implements IMaterialRepository {
                foreignField: "_id",
                as: "brandDetails"
             }
-         }])
-      return MaterialData ? (MaterialData as Material[]) : []
+         },{
+            $match:{
+               material_name:{$regex:searchRegex}
+            }
+         },{
+            $skip:skip
+         },{$limit:5}])
+
+         const totalPage = await MaterialModel.countDocuments()/5
+       return {
+         getMaterialData:MaterialData,
+         totalPage
+      }
    }
    async findAllProject(): Promise<Project[] | []> {
       const projectData = await ProjectModel.find()
       return projectData ? (projectData as Project[]) : []
    }
    async findMaterailWithNameCategoryBrand(material_name: string, category_id: string, brand_id: string): Promise<MaterialList | null> {
-      const existMaterial = await MaterialModel.findOne({ material_name, category_id, brand_id })
+      const existMaterial = await MaterialModel.findOne({ material_name:{$regex:new RegExp(`^${material_name}$`,'i')}, category_id, brand_id })
       return existMaterial ? existMaterial : null
    }
-   async saveMaterial(material_name: string, category_id: string, brand_id: string, unit_id: string, unit_rate: number, stock: number): Promise<MaterialList > {
+   async saveMaterial(material_name: string, category_id: string, brand_id: string, unit_id: string, unit_rate: number, stock: number): Promise<MaterialList> {
       const newMaterial = new MaterialModel({
          material_name,
          category_id,
@@ -63,21 +76,21 @@ export class MaterialmongooseRepository implements IMaterialRepository {
          unit_rate,
          stock
       })
-      const savedMaterial =  await newMaterial.save()
-      return savedMaterial 
+      const savedMaterial = await newMaterial.save()
+      return savedMaterial
    }
    async findMaterialById(_id: string): Promise<MaterialList | null> {
-       const materialData = await MaterialModel.findOne({_id})
-       return materialData ? (materialData as MaterialList) : null
+      const materialData = await MaterialModel.findOne({ _id })
+      return materialData ? (materialData as MaterialList) : null
    }
    async findMaterialInEdit(_id: string, material_name: string, brand_id: string, category_id: string): Promise<MaterialList | null> {
-       const existMaterial = await MaterialModel.findOne({_id:{$ne:_id},material_name,category_id,brand_id})
-       return existMaterial ? (existMaterial as MaterialList) : null
+      const existMaterial = await MaterialModel.findOne({ _id: { $ne: _id }, material_name:{$regex:new RegExp(`^${material_name}$`,'i')}, category_id, brand_id })
+      return existMaterial ? (existMaterial as MaterialList) : null
    }
    async updateMaterialById(_id: string, material_name: string, category_id: string, brand_id: string, unit_id: string, unit_rate: number, stock: number): Promise<void> {
-      await MaterialModel.findByIdAndUpdate(_id,{material_name,category_id,brand_id,unit_id,unit_rate,stock})
+      await MaterialModel.findByIdAndUpdate(_id, { material_name, category_id, brand_id, unit_id, unit_rate, stock })
    }
    async deleteMaterialById(_id: string): Promise<void> {
-        await MaterialModel.findByIdAndDelete(_id);
+      await MaterialModel.findByIdAndDelete(_id);
    }
 }

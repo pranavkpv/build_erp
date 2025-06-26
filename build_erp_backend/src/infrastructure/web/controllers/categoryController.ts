@@ -18,7 +18,8 @@ export class CategoryController {
    }
    categoryList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-         const result = await this.displayAllCategoryUseCase.execute()
+          const {page,search} = req.query
+         const result = await this.displayAllCategoryUseCase.execute(Number(page),String(search))
          res.status(200).json(result)
       } catch (error) {
          console.log(error)

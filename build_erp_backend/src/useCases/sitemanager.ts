@@ -7,9 +7,12 @@ export class DisplayAllSitemanagerUseCase {
    constructor(SitemanagerRepository: ISitemanagerRepository) {
       this.SitemanagerRepository = SitemanagerRepository
    }
-   async execute(): Promise<Sitemanager[] | []> {
-      const sitemanagerData = await this.SitemanagerRepository.findAllSitemanager()
-      return sitemanagerData ? sitemanagerData : []
+   async execute(page:number,search:string): Promise<{getSiteData:any[];totalPage:number }> {
+      const {getSiteData,totalPage} = await this.SitemanagerRepository.findAllSitemanager(page,search)
+      return {
+         getSiteData,
+         totalPage
+      }
    }
 }
 

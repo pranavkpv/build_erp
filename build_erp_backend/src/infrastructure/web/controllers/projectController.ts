@@ -32,7 +32,8 @@ export class ProjectController {
    }
    projectData = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-         const result = await this.displayProjectUseCase.execute()
+         const {page,search} = req.query
+         const result = await this.displayProjectUseCase.execute(Number(page),String(search))
          res.status(200).json(result)
       } catch (error) {
          console.log(error)

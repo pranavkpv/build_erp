@@ -7,4 +7,5 @@ export interface IUnitRepository{
    findUnitInEdit(_id:string,unit_name:string):Promise<Unit | null>
    updateUnitById(_id:string,unit_name:string,short_name:string):Promise<void>
    deleteUnitById(_id:string):Promise<void>
+   findAllListUnit(page:number,search:string):Promise<{getUnitData:any[];totalPage:number }>
 }

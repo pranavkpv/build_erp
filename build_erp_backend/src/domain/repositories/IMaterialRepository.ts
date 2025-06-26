@@ -7,7 +7,7 @@ import { Unit } from "../types/unit";
 
 export interface IMaterialRepository{
    //lookup in category_id,brand_id,unit_id
-   findAllMaterial():Promise<Material[] | []>;
+   findAllMaterial(page:number,search:string):Promise<{getMaterialData:any[];totalPage:number }>;
    findMaterialById(_id:string):Promise<MaterialList | null>
    findAllProject():Promise<Project[] | []>;
    findMaterailWithNameCategoryBrand(material_name:string,category_id:string,brand_id:string):Promise<MaterialList | null>;

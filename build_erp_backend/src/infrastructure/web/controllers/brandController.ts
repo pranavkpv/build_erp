@@ -18,7 +18,8 @@ export class brandController {
    }
    brandList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-         const result = await this.displayBrandUseCase.execute()
+          const {page,search} = req.query
+         const result = await this.displayBrandUseCase.execute(Number(page),String(search))
          res.status(200).json(result)
       } catch (error) {
          console.log(error)

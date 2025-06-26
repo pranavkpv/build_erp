@@ -9,9 +9,12 @@ export class DisplayAllMaterialUseCase {
    constructor(materialRepository: IMaterialRepository) {
       this.materialRepository = materialRepository
    }
-   async execute(): Promise<Material[] | []> {
-      const materialData = await this.materialRepository.findAllMaterial()
-      return materialData ? (materialData as Material[]) : []
+   async execute(page:number,search:string): Promise<{getMaterialData:any[];totalPage:number }> {
+      const {getMaterialData,totalPage} = await this.materialRepository.findAllMaterial(page, search)
+      return {
+         getMaterialData,
+         totalPage
+      }
    }
 }
 

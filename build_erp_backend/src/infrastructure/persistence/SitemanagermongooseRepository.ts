@@ -4,12 +4,18 @@ import SitemanagerModel from "../../models/SitemanagerModel";
 
 
 export class SitemanagetmongooseRepository implements ISitemanagerRepository {
-   async findAllSitemanager(): Promise<Sitemanager[] | []> {
-      const list = await SitemanagerModel.find()
-      return list ? list : []
+   async findAllSitemanager(page:number,search:string): Promise<{getSiteData:any[];totalPage:number }> {
+       const skip = (page) * 5
+      const searchRegex = new RegExp(search, "i");
+      const list = await SitemanagerModel.find({username:{$regex:searchRegex}}).skip(skip).limit(5)
+      const totalPage = await SitemanagerModel.countDocuments()/5
+      return {
+         getSiteData: list,
+         totalPage
+      }
    }
    async findSitemanagerByEmail(email: string): Promise<Sitemanager | null> {
-      const ExistSitemanager = await SitemanagerModel.findOne({ email: email })
+      const ExistSitemanager = await SitemanagerModel.findOne({ email:{$regex:new RegExp(`^${email}$`,"i")} })
       return ExistSitemanager ? ExistSitemanager : null
    }
    async saveSitemanager(username: string, email: string, password: string): Promise<void> {
@@ -21,7 +27,7 @@ export class SitemanagetmongooseRepository implements ISitemanagerRepository {
       await newSitemanager.save()
    }
    async findSitemanagerInEdit(_id: string, email: string): Promise<Sitemanager | null> {
-      const existData = await SitemanagerModel.findOne({ _id: { $ne: _id }, email: email })
+      const existData = await SitemanagerModel.findOne({ _id: { $ne: _id }, email: {$regex:new RegExp(`^${email}$`,"i")} })
       return existData ? existData : null
    }
    async updateSitemanager(_id: string, username: string, email: string, password: string): Promise<void> {

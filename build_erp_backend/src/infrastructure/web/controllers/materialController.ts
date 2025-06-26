@@ -32,7 +32,8 @@ export class MaterialController {
 
    materialList = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
       try {
-         const result = await this.displayAllMaterialUseCase.execute()
+         const {page,search} = req.query
+         const result = await this.displayAllMaterialUseCase.execute(Number(page),String(search))
          res.status(200).json(result)
       } catch (error) {
          console.log(error)

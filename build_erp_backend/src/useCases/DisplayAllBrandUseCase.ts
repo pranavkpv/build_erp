@@ -8,9 +8,12 @@ export class DisplayAllBrandUseCase {
    constructor(brandRepository: IBrandRepository) {
       this.brandRepository = brandRepository
    }
-   async execute(): Promise<Brand[] | []> {
-      const allBrandData = await this.brandRepository.findAllBrand()
-      return allBrandData ? (allBrandData as Brand[]) : []
+   async execute(page:number,search:string): Promise<{getBrandData:any[];totalPage:number }> {
+      const {getBrandData,totalPage} = await this.brandRepository.findAllListBrand(page,search)
+      return {
+         getBrandData,
+         totalPage
+      }
    }
 }
 

@@ -7,4 +7,5 @@ export interface ICategoryRepository{
    findCategoryInEdit(_id:string,category_name:string):Promise<Category | null>
    updateCategoryById(_id:string,category_name:string,description:string):Promise<void>
    deleteCategoryById(_id:string):Promise<void>
+   findAllListCategory(page:number,search:string):Promise<{getCategoryData:any[];totalPage:number }>
 }

@@ -7,25 +7,35 @@ export class UnitMongooseRepository implements IUnitRepository {
       const existUnit = await UnitModel.find({})
       return existUnit ? (existUnit as Unit[]) : []
    }
-   async findUnitByunit_name(unit_name:string):Promise<Unit | null>{
-      const ExistData = await UnitModel.findOne({ unit_name })
+   async findUnitByunit_name(unit_name: string): Promise<Unit | null> {
+      const ExistData = await UnitModel.findOne({ unit_name:{$regex:new RegExp(`${unit_name}$`)} })
       return ExistData ? (ExistData as Unit) : null
    }
-   async saveUnit(unit_name:string,short_name:string):Promise<void>{
-       const newUnit = new UnitModel({
+   async saveUnit(unit_name: string, short_name: string): Promise<void> {
+      const newUnit = new UnitModel({
          unit_name,
          short_name
       })
       await newUnit.save()
    }
-   async findUnitInEdit(_id:string,unit_name:string):Promise<Unit | null>{
-      const existData = await UnitModel.findOne({ _id: { $ne: _id }, unit_name: unit_name })
+   async findUnitInEdit(_id: string, unit_name: string): Promise<Unit | null> {
+      const existData = await UnitModel.findOne({ _id: { $ne: _id }, unit_name: {$regex:new RegExp(`${unit_name}$`)} })
       return existData ? (existData as Unit) : null
    }
-   async updateUnitById(_id:string,unit_name:string,short_name:string):Promise<void>{
+   async updateUnitById(_id: string, unit_name: string, short_name: string): Promise<void> {
       await UnitModel.findByIdAndUpdate(_id, { unit_name, short_name })
    }
-   async deleteUnitById(_id:string):Promise<void>{
-       await UnitModel.findByIdAndDelete(_id)
+   async deleteUnitById(_id: string): Promise<void> {
+      await UnitModel.findByIdAndDelete(_id)
+   }
+   async findAllListUnit(page: number, search: string): Promise<{ getUnitData: any[]; totalPage: number; }> {
+      const skip = (page) * 5
+      const searchRegex = new RegExp(search, "i");
+      const brandList = await UnitModel.find({ unit_name: { $regex: searchRegex } }).skip(skip).limit(5)
+      const totalPage = await UnitModel.countDocuments() / 5
+      return {
+         getUnitData: brandList,
+         totalPage
+      }
    }
 }

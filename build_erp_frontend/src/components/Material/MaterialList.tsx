@@ -26,14 +26,14 @@ type MaterialListProps = {
   setDeleteEnable: React.Dispatch<React.SetStateAction<boolean>>;
   setDeleteId: React.Dispatch<React.SetStateAction<string>>;
   refreshData:()=>void
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  setSearch:React.Dispatch<React.SetStateAction<string>> 
+  search:string
+  page:number
+  totalPage:number
 };
 
-function MaterialList({ setEnable, enable, materialData, setDeleteEnable, setDeleteId }: MaterialListProps) {
-  const [search, setSearch] = useState("");
-
-  const filteredMaterials = materialData.filter((item) =>
-    item.material_name.toLowerCase().includes(search.toLowerCase())
-  );
+function MaterialList({ setEnable, enable, materialData, setDeleteEnable, setDeleteId,setPage,setSearch,search,page,totalPage }: MaterialListProps) {
 
   if (enable) return null;
 
@@ -76,16 +76,16 @@ function MaterialList({ setEnable, enable, materialData, setDeleteEnable, setDel
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {filteredMaterials.length === 0 ? (
+              {materialData.length === 0 ? (
                 <tr>
                   <td colSpan={7} className="text-center py-12 text-gray-400 text-sm font-medium">
                     No materials found.
                   </td>
                 </tr>
               ) : (
-                filteredMaterials.map((element, index) => (
+                materialData.map((element, index) => (
                   <tr key={element._id} className="hover:bg-gray-700/50 transition-colors duration-150">
-                    <td className="px-6 py-4 font-medium text-gray-200">{index + 1}</td>
+                    <td className="px-6 py-4 font-medium text-gray-200">{(index + 1) + (page * 5)}</td>
                     <td className="px-6 py-4 text-gray-200">{element.material_name}</td>
                     <td className="px-6 py-4 text-gray-200">{element.categoryDetails[0]?.category_name || "-"}</td>
                     <td className="px-6 py-4 text-gray-200">{element.brandDetails[0]?.brand_name || "-"}</td>
@@ -114,6 +114,21 @@ function MaterialList({ setEnable, enable, materialData, setDeleteEnable, setDel
               )}
             </tbody>
           </table>
+          <div className="flex justify-center gap-2 mt-6">
+              {Array.from({ length: totalPage }, (_, i) => (
+                <button
+                  key={i + 1}
+                  onClick={() => setPage(i)}
+                  className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i
+                      ? 'bg-teal-600 text-white shadow-md'
+                      : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
         </div>
       </div>
     </div>
