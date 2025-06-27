@@ -1,3 +1,4 @@
+import { Tokens } from "./auth"
 import { User } from "./user"
 
 export interface Project {
@@ -61,7 +62,8 @@ export interface statusChangeInput {
 //status change output
 export interface outputProject{
    success:boolean,
-   message:string
+   message:string,
+   token ?: Tokens
 }
 
 

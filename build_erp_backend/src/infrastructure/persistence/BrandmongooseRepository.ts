@@ -1,6 +1,7 @@
 import { IBrandRepository } from "../../domain/repositories/IBrandRepository";
 import { Brand } from "../../domain/types/brand";
 import BrandModel from "../../models/BrandModel";
+import MaterialModel from "../../models/MaterialModel";
 
 export class BrandmongooseRepository implements IBrandRepository {
    async findAllBrand(): Promise<Brand[] | []> {

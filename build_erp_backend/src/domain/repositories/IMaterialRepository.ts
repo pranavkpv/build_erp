@@ -15,4 +15,7 @@ export interface IMaterialRepository{
    findMaterialInEdit(_id:string,material_name:string,brand_id:string,category_id:string):Promise<MaterialList | null>;
    updateMaterialById(_id:string,material_name:string,category_id:string,brand_id:string,unit_id:string,unit_rate:number,stock:number):Promise<void>;
    deleteMaterialById(_id:string):Promise<void>;
+   findMaterialByBrandId(brand_id:string):Promise<MaterialList | null>;
+   findMaterialByCategoryId(category_id:string):Promise<MaterialList | null>;
+   findMaterialByUnitId(unit_id:string):Promise<MaterialList | null>;
 }

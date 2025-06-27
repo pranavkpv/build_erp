@@ -88,6 +88,8 @@ import { AdminJwtServiceImpl } from './src/services/adminJwtService';
 import { AddSiteToProjectmongooseRepository } from './src/infrastructure/persistence/AddSiteToProjectmongooseRepository';
 import { AddSiteToprojectFetchProjectUseCase } from './src/useCases/AddSiteToprojectFetchProjectUseCase';
 import { AddSiteToprojectFetchSitemanagerUseCase } from './src/useCases/AddSiteToprojectFetchSitemanagerUseCase';
+import { SitemanagerLoginUseCase } from './src/useCases/SitemanagerLoginUseCase';
+import createSitemanagerRoute from './src/infrastructure/web/routes/siteRouter';
 
 
 require("dotenv").config();
@@ -140,15 +142,15 @@ async function compositeRoot() {
       const displayAllCategoryUseCase = new DisplayAllCategoryUseCase(categoryRepository)
       const addCategoryUseCase = new SaveCategoryUseCase(categoryRepository)
       const editcategoryUseCase = new UpdateCategoryUseCase(categoryRepository)
-      const deleteCategoryUseCase = new DeleteCategoryUseCase(categoryRepository)
+      const deleteCategoryUseCase = new DeleteCategoryUseCase(categoryRepository,materialRepository)
       const displayUnitUseCase = new DisplayAllUnitUseCase(unitRepository)
       const addUnitUseCase = new SaveUnitUseCase(unitRepository)
       const editUnitUseCase = new updateUnitUseCase(unitRepository)
-      const newdeleteUnitUseCase = new deleteUnitUseCase(unitRepository)
+      const newdeleteUnitUseCase = new deleteUnitUseCase(unitRepository,materialRepository)
       const displayBrandUseCase = new DisplayAllBrandUseCase(brandRepository)
       const addBrandUseCase = new SaveBrandUseCase(brandRepository)
       const editBrandUseCase = new UpdateBrandUseCase(brandRepository)
-      const deleteBrandUseCase = new DeleteBrandUseCase(brandRepository)
+      const deleteBrandUseCase = new DeleteBrandUseCase(brandRepository,materialRepository)
       const displayAllMaterialUseCase = new DisplayAllMaterialUseCase(materialRepository)
       const getAddMaterialUseCase = new DisplayAddMaterialDataUseCase(materialRepository,categoryRepository,brandRepository,unitRepository)
       const saveMaterialUseCase = new AddMaterialUseCase(materialRepository, projectStockRepository)
@@ -174,6 +176,7 @@ async function compositeRoot() {
       const deleteSitetoprojectuseCase = new DeleteSiteToProjectUseCase(projectRepository)
       const addSiteToprojectFetchProjectUseCase = new AddSiteToprojectFetchProjectUseCase(addSiteToprojectRepoSitory)
       const addSiteToprojectFetchSitemanagerUseCase = new AddSiteToprojectFetchSitemanagerUseCase(addSiteToprojectRepoSitory)
+      const sitemanagerLoginUseCase = new SitemanagerLoginUseCase(sitemanagerRepository,JwtService,hasher)
 
 
       const newAdminController = new adminController(adminLoginUsecase)
@@ -183,7 +186,7 @@ async function compositeRoot() {
       const newMaterialController = new MaterialController(displayAllMaterialUseCase, getAddMaterialUseCase , saveMaterialUseCase, getEditMaterialUseCase, updateMaterialUseCase , deleteMaterialUseCase)
       const newProjectController = new ProjectController(displayProjectUseCase, displayAddProjectUseCase, addProjectUseCase, editProjectUseCase, removeProjectUseCase, changeStatusUseCase)
       const newLabourController = new LabourController(displayAllLabourUseCase, addLabourUseCase, updateLabourUseCase, deleteLabourUseCase)
-      const newSitemanagerController = new SitemanagerController(displayAllSitemanagerUseCase, addSitemanagerUseCase, editSitemanagerUsecase, deleteSitemanagerUseCase)
+      const newSitemanagerController = new SitemanagerController(displayAllSitemanagerUseCase, addSitemanagerUseCase, editSitemanagerUsecase, deleteSitemanagerUseCase,sitemanagerLoginUseCase)
       const newAddSiteController = new AddSiteController(addSiteToProjectUseCase, listSiteToProjectUseCase, deleteSitetoprojectuseCase,addSiteToprojectFetchProjectUseCase,addSiteToprojectFetchSitemanagerUseCase)
 
       app.use("/admin",createAdminRoute(newAdminController,
@@ -191,6 +194,8 @@ async function compositeRoot() {
          newProjectController,newLabourController,newSitemanagerController,newAddSiteController
 
       ))
+
+      app.use("/site",createSitemanagerRoute(newSitemanagerController))
 
    } catch (error) {
       console.log(error)

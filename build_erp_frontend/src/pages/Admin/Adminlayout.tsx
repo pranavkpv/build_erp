@@ -1,5 +1,5 @@
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
+import Header from "../../components/Admin/Header";
+import Sidebar from "../../components/Admin/Sidebar";
 import { Outlet } from "react-router-dom";
 function Adminlayout() {
    return (

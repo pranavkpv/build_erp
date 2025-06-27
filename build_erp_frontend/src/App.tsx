@@ -7,7 +7,7 @@ import { ToastContainer } from "react-toastify"
 import Adminlogin from './pages/Admin/Adminlogin'
 import Adminlayout from "./pages/Admin/Adminlayout"
 import Category from "./components/Category/Category"
-import Dashboard from "./components/Dashboard"
+import Dashboard from "./components/Admin/Dashboard"
 import Unit from "./components/Unit/Unit"
 import Brand from "./components/Brand/Brand"
 import Project from "./components/ProjectRegister/Projectlist"
@@ -17,6 +17,11 @@ import SitemanagerList from "./components/Sitemanager/SitemanagerList"
 import ListSiteToProject from "./components/AddSiteToproject/ListSiteToproject"
 import Backloginprotected from "./routes/protectedRoute/user/backloginprotected"
 import AdminBackloginprotected from "./routes/protectedRoute/admin/backloginprotected"
+import SiteLogin from "./pages/Sitemanager/SiteLogin"
+import BackLoginSitemanagerProtected from "./routes/protectedRoute/sitemanager/blockLoginSitemanagerProtected"
+import SiteLayout from "./pages/Sitemanager/SiteLayout"
+import SiteDashboard from "./pages/Sitemanager/SiteDashboard"
+
 
 
 
@@ -42,6 +47,11 @@ function App() {
             <Route path = "Labour" element = {<Labourlist />} />
             <Route path ="Sitemanager" element = {< SitemanagerList />} />
             <Route path = "addToSite" element = {<ListSiteToProject />} />
+          </Route>
+          <Route path="/site/login" element={<BackLoginSitemanagerProtected><SiteLogin /></BackLoginSitemanagerProtected>} />
+          <Route path="/site" element = {<SiteLayout />} >
+             <Route path ="dashboard" element = {<SiteDashboard />} />
+
           </Route>
         </Routes>
       </BrowserRouter>

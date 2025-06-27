@@ -10,7 +10,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 
-function Header() {
+function SiteHeader() {
    // const [isProfileOpen, setIsProfileOpen] = useState(false);
    // const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
@@ -104,4 +104,4 @@ function Header() {
    );
 }
 
-export default Header;
+export default SiteHeader;
