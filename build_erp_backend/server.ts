@@ -85,6 +85,9 @@ import { DeleteSiteToProjectUseCase } from './src/useCases/DeleteSitemanagerInPr
 import { RefreshTokenUseCase } from './src/useCases/RefreshTokenUseCase';
 import { JwtServiceImpl } from './src/services/JwtService';
 import { AdminJwtServiceImpl } from './src/services/adminJwtService';
+import { AddSiteToProjectmongooseRepository } from './src/infrastructure/persistence/AddSiteToProjectmongooseRepository';
+import { AddSiteToprojectFetchProjectUseCase } from './src/useCases/AddSiteToprojectFetchProjectUseCase';
+import { AddSiteToprojectFetchSitemanagerUseCase } from './src/useCases/AddSiteToprojectFetchSitemanagerUseCase';
 
 
 require("dotenv").config();
@@ -131,6 +134,7 @@ async function compositeRoot() {
      const projectRepository = new ProjectmongooseRepository()
      const labourRepository = new LabourmongooseRepository()
      const sitemanagerRepository = new SitemanagetmongooseRepository()
+     const addSiteToprojectRepoSitory  = new AddSiteToProjectmongooseRepository()
 
       const adminLoginUsecase = new AdminLoginUseCase(adminRepository,AdminJwtService)
       const displayAllCategoryUseCase = new DisplayAllCategoryUseCase(categoryRepository)
@@ -166,8 +170,10 @@ async function compositeRoot() {
       const editSitemanagerUsecase = new UpdateSitemanagerUseCase(sitemanagerRepository)
       const deleteSitemanagerUseCase = new DeleteSitemanagerUseCase(sitemanagerRepository)
       const addSiteToProjectUseCase = new AddSiteToProjectUseCase(projectRepository)
-      const listSiteToProjectUseCase = new ListSiteToProject(projectRepository)
+      const listSiteToProjectUseCase = new ListSiteToProject(addSiteToprojectRepoSitory)
       const deleteSitetoprojectuseCase = new DeleteSiteToProjectUseCase(projectRepository)
+      const addSiteToprojectFetchProjectUseCase = new AddSiteToprojectFetchProjectUseCase(addSiteToprojectRepoSitory)
+      const addSiteToprojectFetchSitemanagerUseCase = new AddSiteToprojectFetchSitemanagerUseCase(addSiteToprojectRepoSitory)
 
 
       const newAdminController = new adminController(adminLoginUsecase)
@@ -178,7 +184,7 @@ async function compositeRoot() {
       const newProjectController = new ProjectController(displayProjectUseCase, displayAddProjectUseCase, addProjectUseCase, editProjectUseCase, removeProjectUseCase, changeStatusUseCase)
       const newLabourController = new LabourController(displayAllLabourUseCase, addLabourUseCase, updateLabourUseCase, deleteLabourUseCase)
       const newSitemanagerController = new SitemanagerController(displayAllSitemanagerUseCase, addSitemanagerUseCase, editSitemanagerUsecase, deleteSitemanagerUseCase)
-      const newAddSiteController = new AddSiteController(addSiteToProjectUseCase, listSiteToProjectUseCase, deleteSitetoprojectuseCase)
+      const newAddSiteController = new AddSiteController(addSiteToProjectUseCase, listSiteToProjectUseCase, deleteSitetoprojectuseCase,addSiteToprojectFetchProjectUseCase,addSiteToprojectFetchSitemanagerUseCase)
 
       app.use("/admin",createAdminRoute(newAdminController,
          newCategoryController,newUnitController,newBrandController,newMaterialController,

@@ -1,13 +1,17 @@
+import { IAddSiteToProjectRepository } from "../domain/repositories/IAddSiteToProjectRepository";
 import { IprojectRepository } from "../domain/repositories/IProjectRepository"
 import { projectWithSitemanager } from "../domain/types/addSite"
 
 export class ListSiteToProject {
-   private projectRepository: IprojectRepository
-   constructor(projectRepository: IprojectRepository) {
-      this.projectRepository = projectRepository
-   }
-   async execute(): Promise<projectWithSitemanager[] | []> {
-      const results = await this.projectRepository.findProjectWithSitemanager()
-      return results ? results : []
+  private addSiteToprojectRepo : IAddSiteToProjectRepository
+  constructor(addSiteToprojectRepo : IAddSiteToProjectRepository){
+   this.addSiteToprojectRepo = addSiteToprojectRepo
+  }
+   async execute(page: number, search: string): Promise<{ getAddSiteData: any[]; totalPage: number }> {
+      const { getAddSiteData, totalPage } = await this.addSiteToprojectRepo.findProjectwithSitemanager(page,search)
+      return {
+         getAddSiteData,
+         totalPage
+      }
    }
 }

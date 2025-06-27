@@ -120,7 +120,6 @@ function ProjectAdd({ enableAdd, setEnableAdd, onAddSuccess }: EditType) {
 
       if (response.data.success) {
         toast.success(response.data.message);
-        setUserList([])
         setSelectedUserId("")
         setProjectName("")
         setAddress("")

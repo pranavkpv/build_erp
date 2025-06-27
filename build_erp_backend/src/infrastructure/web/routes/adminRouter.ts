@@ -62,6 +62,8 @@ const createAdminRoute = (adminController: adminController,
    router.delete("/sitemanager",sitemanagerController.deleteSitemanager)
 
    router.get("/addToSite",addSiteController.listSite)
+   router.get("/addSiteToProjectData",addSiteController.fetchProject)
+   router.get("/addSiteToSiteData",addSiteController.fetchSitemanager)
    router.post("/addToSite",addSiteController.saveData)
    router.delete("/addToSite",addSiteController.deleteSite)
 

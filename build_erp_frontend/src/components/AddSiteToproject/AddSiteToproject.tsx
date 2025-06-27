@@ -30,7 +30,7 @@ function AddSiteToProject({ addEnable, setAddEnable, onAddSuccess }: AddPropData
   useEffect(() => {
     const fetchSiteManager = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/sitemanager`);
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/addSiteToSiteData`);
         setSiteManager(response.data);
       } catch (error) {
         toast.error("Failed to fetch site managers");
@@ -43,7 +43,7 @@ function AddSiteToProject({ addEnable, setAddEnable, onAddSuccess }: AddPropData
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/project`);
+        const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/addSiteToProjectData`);
         setProjectList(response.data);
       } catch (error) {
         toast.error("Failed to fetch projects");
@@ -79,6 +79,8 @@ function AddSiteToProject({ addEnable, setAddEnable, onAddSuccess }: AddPropData
         setAddEnable(false);
         setSelectedSiteManager("");
         setSelectedProject([]);
+        setSiteManager([])
+        setProjectList([])
       } else {
         toast.error(response.data.message || "Failed to add site assignment");
       }

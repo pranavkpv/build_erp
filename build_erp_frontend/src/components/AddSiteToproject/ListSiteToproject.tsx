@@ -2,7 +2,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AddSiteToProject from "./AddSiteToproject";
-import DeleteSiteToproject from "./DeleteSiteToproject";
+import DeleteSiteToProject from "./DeleteSiteToproject";
+// import AddSiteToProject from "./AddSiteToproject";
+// import DeleteSiteToproject from "./DeleteSiteToproject";
 
 
 type SiteToProject = {
@@ -18,6 +20,8 @@ type SiteToProject = {
 function ListSiteToProject() {
   const [data, setData] = useState<SiteToProject[]>([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0)
+  const [totalPage, setTotalPage] = useState(0)
   // Delete data
   const [deleteEnable, setDeleteEnable] = useState(false);
   const [deleteProjectId, setDeleteProjectId] = useState("");
@@ -27,9 +31,9 @@ function ListSiteToProject() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin/addToSite`);
-      console.log(response)
-      setData(response.data);
+      const response = await axios.get(`${ import.meta.env.VITE_BASE_URL }/admin/addToSite`, { params: { page, search } });
+      setTotalPage(Math.ceil(response.data.totalPage))
+      setData(response.data.getAddSiteData);
     } catch (error) {
       toast.error("Failed to fetch site assignments");
     }
@@ -37,14 +41,9 @@ function ListSiteToProject() {
 
   useEffect(() => {
     fetchData();
-  }, []); // Empty dependency array to fetch on mount only
+  }, [page, search]);
 
-  // Filter data based on search input
-  const filteredData = data.filter(
-    (item) =>
-      item.project_name.toLowerCase().includes(search.toLowerCase()) ||
-      item.sitemanagerDetails[0]?.username?.toLowerCase().includes(search.toLowerCase())
-  );
+
 
   return (
     <div className="p-6 sm:p-8 min-h-screen bg-gray-900">
@@ -82,14 +81,14 @@ function ListSiteToProject() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-700/50">
-              {filteredData.length === 0 ? (
+              {data.length === 0 ? (
                 <tr>
                   <td colSpan={4} className="text-center py-12 text-gray-400 text-sm font-medium">
                     No site assignments found.
                   </td>
                 </tr>
               ) : (
-                filteredData.map((element, index) => (
+                data.map((element, index) => (
                   <tr key={element._id} className="hover:bg-gray-700/50 transition-colors duration-150">
                     <td className="px-6 py-4 font-medium text-gray-200">{index + 1}</td>
                     <td className="px-6 py-4 text-gray-200">{element.project_name}</td>
@@ -104,7 +103,7 @@ function ListSiteToProject() {
                           setDeleteSiteManagerId(element?.sitemanagerDetails[0]?._id || "");
                         }}
                         className="text-red-400 hover:text-red-300 p-2 rounded-md hover:bg-gray-600/50 transition-all duration-200"
-                        aria-label={`Delete assignment for ${element.project_name}`}
+                        aria-label={`Delete assignment for ${ element.project_name }`}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
@@ -127,21 +126,36 @@ function ListSiteToProject() {
               )}
             </tbody>
           </table>
+          <div className="flex justify-center gap-2 mt-6">
+            {Array.from({ length: totalPage }, (_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setPage(i)}
+                className={`px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-200
+        ${ page === i
+                    ? 'bg-teal-600 text-white shadow-md'
+                    : 'bg-gray-700 text-gray-300 hover:bg-teal-500 hover:text-white' }
+      `}
+              >
+                {i + 1}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <AddSiteToProject
+      <AddSiteToProject
           addEnable={addEnable}
           setAddEnable={setAddEnable}
           onAddSuccess={fetchData}
         />
 
-        <DeleteSiteToproject
+        <DeleteSiteToProject
           deleteEnable={deleteEnable}
           setDeleteEnable={setDeleteEnable}
           deleteProjectId={deleteProjectId}
           deleteSiteManagerId={deleteSiteManagerId}
           onDeleteSuccess={fetchData}
-        />
+        /> 
       </div>
     </div>
   );

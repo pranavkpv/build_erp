@@ -10,6 +10,5 @@ export interface IprojectRepository{
    DeleteProjectById(_id:string):Promise<void>
    changeProjectStatus(_id:string,status:string):Promise<void>
    addSitemanagerToProject(_id:string,siteManager_id:string):Promise<void>
-   findProjectWithSitemanager():Promise<projectWithSitemanager[] | []>;
    removeSitemanagerInProject(_id:string,sitemanager_id:string):Promise<void>
 }
