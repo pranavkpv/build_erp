@@ -47,5 +47,12 @@ export class SitemanagetmongooseRepository implements ISitemanagerRepository {
       }
       return result
    }
+   async findSitemanagerById(_id:string):Promise<Sitemanager | null>{
+      const data = await SitemanagerModel.findById(_id)
+      return data ? data :null
+   }
+   async updatePassword(_id: string, password: string): Promise<void> {
+      await SitemanagerModel.findByIdAndUpdate(_id,{password})
+   }
   
 }

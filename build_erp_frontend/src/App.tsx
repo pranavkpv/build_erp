@@ -21,6 +21,7 @@ import SiteLogin from "./pages/Sitemanager/SiteLogin"
 import BackLoginSitemanagerProtected from "./routes/protectedRoute/sitemanager/blockLoginSitemanagerProtected"
 import SiteLayout from "./pages/Sitemanager/SiteLayout"
 import SiteDashboard from "./pages/Sitemanager/SiteDashboard"
+import DisplaySitemanagerData from "./components/ChangepassSitemanager/DisplayData"
 
 
 
@@ -51,6 +52,7 @@ function App() {
           <Route path="/site/login" element={<BackLoginSitemanagerProtected><SiteLogin /></BackLoginSitemanagerProtected>} />
           <Route path="/site" element = {<SiteLayout />} >
              <Route path ="dashboard" element = {<SiteDashboard />} />
+             <Route path ="changepass" element = {<DisplaySitemanagerData />} />
 
           </Route>
         </Routes>

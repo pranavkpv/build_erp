@@ -90,6 +90,8 @@ import { AddSiteToprojectFetchProjectUseCase } from './src/useCases/AddSiteTopro
 import { AddSiteToprojectFetchSitemanagerUseCase } from './src/useCases/AddSiteToprojectFetchSitemanagerUseCase';
 import { SitemanagerLoginUseCase } from './src/useCases/SitemanagerLoginUseCase';
 import createSitemanagerRoute from './src/infrastructure/web/routes/siteRouter';
+import { changePasswordController } from './src/infrastructure/web/controllers/changePasswordController';
+import { UpdateSitemanagerPasswordUseCase } from './src/useCases/UpdateSitemanagerPasswordUseCase';
 
 
 require("dotenv").config();
@@ -177,6 +179,7 @@ async function compositeRoot() {
       const addSiteToprojectFetchProjectUseCase = new AddSiteToprojectFetchProjectUseCase(addSiteToprojectRepoSitory)
       const addSiteToprojectFetchSitemanagerUseCase = new AddSiteToprojectFetchSitemanagerUseCase(addSiteToprojectRepoSitory)
       const sitemanagerLoginUseCase = new SitemanagerLoginUseCase(sitemanagerRepository,JwtService,hasher)
+      const updateSitemanagerPassword = new UpdateSitemanagerPasswordUseCase(sitemanagerRepository,hasher)
 
 
       const newAdminController = new adminController(adminLoginUsecase)
@@ -188,6 +191,7 @@ async function compositeRoot() {
       const newLabourController = new LabourController(displayAllLabourUseCase, addLabourUseCase, updateLabourUseCase, deleteLabourUseCase)
       const newSitemanagerController = new SitemanagerController(displayAllSitemanagerUseCase, addSitemanagerUseCase, editSitemanagerUsecase, deleteSitemanagerUseCase,sitemanagerLoginUseCase)
       const newAddSiteController = new AddSiteController(addSiteToProjectUseCase, listSiteToProjectUseCase, deleteSitetoprojectuseCase,addSiteToprojectFetchProjectUseCase,addSiteToprojectFetchSitemanagerUseCase)
+      const changepasswordcontroller = new changePasswordController(updateSitemanagerPassword)
 
       app.use("/admin",createAdminRoute(newAdminController,
          newCategoryController,newUnitController,newBrandController,newMaterialController,
@@ -195,7 +199,7 @@ async function compositeRoot() {
 
       ))
 
-      app.use("/site",createSitemanagerRoute(newSitemanagerController))
+      app.use("/site",createSitemanagerRoute(newSitemanagerController,changepasswordcontroller))
 
    } catch (error) {
       console.log(error)

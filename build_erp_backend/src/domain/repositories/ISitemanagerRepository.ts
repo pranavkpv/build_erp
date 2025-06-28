@@ -8,4 +8,6 @@ export interface ISitemanagerRepository{
    updateSitemanager(_id:string,username:string,email:string):Promise<void>
    deleteSitemanager(_id:string):Promise<void>
    generatePassword():Promise<string>
+   findSitemanagerById(_id:string):Promise<Sitemanager | null>
+   updatePassword(_id:string,password:string):Promise<void>
 }

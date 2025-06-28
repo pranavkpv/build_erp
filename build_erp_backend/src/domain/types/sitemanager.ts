@@ -35,3 +35,9 @@ export interface OutPutSitemanager{
   message:string
 }
 
+export interface changePasswordInput{
+  _id :string,
+  password:string,
+  changedpassword:string
+}
+
